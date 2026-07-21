@@ -3,12 +3,17 @@ import Link from 'next/link';
 import AcceptButton from './AcceptButton';
 
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 export default async function QuotesPage() {
-  const { data: quotes, error } = await supabase
+  const { data: quotes, error: quotesErr } = await supabase
     .from('quotes')
-    .select('*, customers(name, email)')
+    .select('*')
     .order('created_at', { ascending: false });
+
+  const { data: customers } = await supabase.from('customers').select('id, name, email');
+  const customerMap = Object.fromEntries((customers || []).map((c) => [c.id, c]));
 
   return (
     <div className="max-w-2xl">
@@ -19,9 +24,9 @@ export default async function QuotesPage() {
         </Link>
       </div>
 
-      {error && <p className="text-red-400 text-sm">{error.message}</p>}
+      {quotesErr && <p className="text-red-400 text-sm mb-4">Error: {quotesErr.message}</p>}
 
-      {!error && (!quotes || quotes.length === 0) && (
+      {!quotesErr && (!quotes || quotes.length === 0) && (
         <p className="opacity-60 text-sm">No quotes yet — create one to get started.</p>
       )}
 
@@ -29,7 +34,7 @@ export default async function QuotesPage() {
         {quotes?.map((q) => (
           <div key={q.id} className="border border-white/10 rounded px-4 py-3 flex justify-between items-center">
             <div>
-              <div className="font-medium">{q.customers?.name || 'Unknown customer'}</div>
+              <div className="font-medium">{customerMap[q.customer_id]?.name || 'Unknown customer'}</div>
               <div className="text-sm opacity-60">
                 Total: {q.total} · Status: {q.status}
               </div>
