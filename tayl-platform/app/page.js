@@ -1,16 +1,32 @@
-export default function Home() {
+import { getCurrentCompanyId } from '../lib/supabase-server';
+
+export default async function Home() {
+  const { user } = await getCurrentCompanyId();
+
   return (
     <div className="max-w-2xl">
       <h1 className="text-2xl font-semibold mb-2">TAYL Automation Platform</h1>
       <p className="opacity-70 mb-6">
-        Phase 1 — quote &amp; proposal calculator is live. Next: invoicing &amp; payments.
+        Multi-tenant — each business gets their own login, data, and connects their own
+        Razorpay account for payments.
       </p>
       <ul className="text-sm space-y-1 opacity-80">
-        <li>✅ Database schema deployed (customers, quotes, proposals, invoices, payments, tasks, CRM log)</li>
-        <li>✅ App connected to Supabase</li>
-        <li>✅ Quote &amp; proposal calculator — create quotes, accept them, auto-drafts an invoice + task</li>
-        <li>⏳ Invoicing &amp; Stripe payments — next session</li>
+        <li>✅ Multi-tenant database — every business's data is isolated (RLS enforced)</li>
+        <li>✅ Sign up / log in — each business gets its own account</li>
+        <li>✅ Quote &amp; proposal calculator — create, accept, auto-drafts invoice + task</li>
+        <li>✅ Invoicing — each business connects their own Razorpay account in Settings</li>
+        <li>⏳ Task automation board — next session</li>
       </ul>
+      {!user && (
+        <div className="mt-6 flex gap-3">
+          <a href="/signup" className="bg-white text-black rounded px-4 py-2 text-sm font-medium">
+            Sign up
+          </a>
+          <a href="/login" className="border border-white/20 rounded px-4 py-2 text-sm">
+            Log in
+          </a>
+        </div>
+      )}
     </div>
   );
 }

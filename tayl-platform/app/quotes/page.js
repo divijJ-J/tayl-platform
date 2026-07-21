@@ -1,4 +1,6 @@
-import { supabase } from '../../lib/supabase';
+import { supabaseAdmin } from '../../lib/supabase';
+import { getCurrentCompanyId } from '../../lib/supabase-server';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import AcceptButton from './AcceptButton';
 
@@ -7,12 +9,19 @@ export const fetchCache = 'force-no-store';
 export const revalidate = 0;
 
 export default async function QuotesPage() {
-  const { data: quotes, error: quotesErr } = await supabase
+  const { user, companyId } = await getCurrentCompanyId();
+  if (!user) redirect('/login');
+
+  const { data: quotes, error: quotesErr } = await supabaseAdmin
     .from('quotes')
     .select('*')
+    .eq('company_id', companyId)
     .order('created_at', { ascending: false });
 
-  const { data: customers } = await supabase.from('customers').select('id, name, email');
+  const { data: customers } = await supabaseAdmin
+    .from('customers')
+    .select('id, name')
+    .eq('company_id', companyId);
   const customerMap = Object.fromEntries((customers || []).map((c) => [c.id, c]));
 
   return (

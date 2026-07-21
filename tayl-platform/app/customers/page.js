@@ -1,11 +1,19 @@
-import { supabase } from '../../lib/supabase';
+import { supabaseAdmin } from '../../lib/supabase';
+import { getCurrentCompanyId } from '../../lib/supabase-server';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 export default async function CustomersPage() {
-  const { data: customers, error } = await supabase
+  const { user, companyId } = await getCurrentCompanyId();
+  if (!user) redirect('/login');
+
+  const { data: customers, error } = await supabaseAdmin
     .from('customers')
     .select('*')
+    .eq('company_id', companyId)
     .order('created_at', { ascending: false });
 
   return (
@@ -13,16 +21,12 @@ export default async function CustomersPage() {
       <h1 className="text-xl font-semibold mb-4">Customers</h1>
 
       {error && (
-        <p className="text-red-400 text-sm mb-4">
-          Connection error: {error.message}. Check your Supabase env vars in Vercel.
-        </p>
+        <p className="text-red-400 text-sm mb-4">Error: {error.message}</p>
       )}
 
       {!error && (!customers || customers.length === 0) && (
         <p className="opacity-60 text-sm">
-          No customers yet — this page is reading live from your Supabase
-          `customers` table. Add a row there and refresh to confirm the
-          connection is working.
+          No customers yet — they get created automatically when you make a quote.
         </p>
       )}
 
