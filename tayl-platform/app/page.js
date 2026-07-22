@@ -14,8 +14,9 @@ export default async function Home() {
         <li>✅ Multi-tenant database — every business's data is isolated (RLS enforced)</li>
         <li>✅ Sign up / log in — each business gets its own account</li>
         <li>✅ Quote &amp; proposal calculator — create, accept, auto-drafts invoice + task</li>
-        <li>✅ Invoicing — each business connects their own Razorpay account in Settings</li>
-        <li>⏳ Task automation board — next session</li>
+        <li>✅ Invoicing — each business connects their own Razorpay account in Settings (test-mode "Mark as Paid" available until then)</li>
+        <li>✅ Task automation board — kanban view, auto-created tasks, comments</li>
+        <li>⏳ AI estimate generator — next session</li>
       </ul>
       {!user && (
         <div className="mt-6 flex gap-3">

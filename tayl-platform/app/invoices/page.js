@@ -3,6 +3,7 @@ import { getCurrentCompanyId } from '../../lib/supabase-server';
 import { redirect } from 'next/navigation';
 import SendButton from './SendButton';
 import CopyLink from './CopyLink';
+import MarkPaidButton from './MarkPaidButton';
 
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
@@ -72,9 +73,17 @@ export default async function InvoicesPage() {
                   {inv.due_date ? ` · Due ${inv.due_date}` : ''}
                 </div>
               </div>
-              {inv.status === 'draft' && <SendButton invoiceId={inv.id} />}
-              {inv.status === 'sent' && inv.stripe_payment_link && (
-                <CopyLink link={inv.stripe_payment_link} />
+              {inv.status === 'draft' && (
+                <div className="flex gap-2">
+                  <SendButton invoiceId={inv.id} />
+                  <MarkPaidButton invoiceId={inv.id} />
+                </div>
+              )}
+              {inv.status === 'sent' && (
+                <div className="flex gap-2">
+                  {inv.stripe_payment_link && <CopyLink link={inv.stripe_payment_link} />}
+                  <MarkPaidButton invoiceId={inv.id} />
+                </div>
               )}
               {inv.status === 'paid' && (
                 <span className="text-sm text-green-400 border border-green-600/40 rounded px-3 py-1.5">
