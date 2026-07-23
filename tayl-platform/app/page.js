@@ -17,7 +17,8 @@ export default async function Home() {
         <li>✅ Invoicing — each business connects their own Razorpay account in Settings (test-mode "Mark as Paid" available until then)</li>
         <li>✅ Task automation board — kanban view, auto-created tasks, comments</li>
         <li>✅ AI estimate generator — describe a job, get a priced estimate from your own catalog, approve to create a quote</li>
-        <li>⏳ Billing for the platform itself + landing page — next session</li>
+        <li>✅ Billing structure — 14-day trial, plan tiers, test-mode subscribe (real payment collection pending your own gateway account)</li>
+        <li>⏳ Landing page + final polish — next session</li>
       </ul>
       {!user && (
         <div className="mt-6 flex gap-3">
