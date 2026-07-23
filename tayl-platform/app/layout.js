@@ -22,6 +22,8 @@ export default async function RootLayout({ children }) {
                 <a href="/quotes" className="opacity-70 hover:opacity-100">Quotes</a>
                 <a href="/invoices" className="opacity-70 hover:opacity-100">Invoices</a>
                 <a href="/tasks" className="opacity-70 hover:opacity-100">Tasks</a>
+                <a href="/estimates" className="opacity-70 hover:opacity-100">AI Estimates</a>
+                <a href="/settings/services" className="opacity-70 hover:opacity-100">Pricing Catalog</a>
                 <a href="/settings/payments" className="opacity-70 hover:opacity-100">Payment Settings</a>
                 <span className="flex-1" />
                 <SignOutButton />
