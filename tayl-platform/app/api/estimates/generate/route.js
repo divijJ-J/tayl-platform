@@ -1,6 +1,6 @@
 import { supabaseAdmin } from '../../../../lib/supabase';
 import { getCurrentCompanyId } from '../../../../lib/supabase-server';
-import { callClaude } from '../../../../lib/anthropic';
+import { callGemini } from '../../../../lib/gemini';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
@@ -12,9 +12,9 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Describe the job first' }, { status: 400 });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return NextResponse.json(
-      { error: 'AI estimator is not configured yet — add ANTHROPIC_API_KEY in Vercel env vars.' },
+      { error: 'AI estimator is not configured yet — add GEMINI_API_KEY in Vercel env vars.' },
       { status: 500 }
     );
   }
@@ -44,7 +44,7 @@ Respond with ONLY valid JSON, no other text, in exactly this shape:
 }`;
 
   try {
-    const raw = await callClaude(systemPrompt, customer_description);
+    const raw = await callGemini(systemPrompt, customer_description);
     const cleaned = raw.replace(/```json|```/g, '').trim();
     const estimate = JSON.parse(cleaned);
     return NextResponse.json({ estimate });
