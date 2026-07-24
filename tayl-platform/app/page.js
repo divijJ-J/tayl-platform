@@ -1,35 +1,55 @@
+import { supabaseAdmin } from '../lib/supabase';
 import { getCurrentCompanyId } from '../lib/supabase-server';
+import Landing from './components/Landing';
+
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 export default async function Home() {
-  const { user } = await getCurrentCompanyId();
+  const { user, companyId } = await getCurrentCompanyId();
+
+  if (!user) {
+    return <Landing />;
+  }
+
+  const [{ count: openTasks }, { count: draftQuotes }, { data: invoices }] = await Promise.all([
+    supabaseAdmin.from('tasks').select('id', { count: 'exact', head: true }).eq('company_id', companyId).eq('status', 'open'),
+    supabaseAdmin.from('quotes').select('id', { count: 'exact', head: true }).eq('company_id', companyId).eq('status', 'draft'),
+    supabaseAdmin.from('invoices').select('status, total').eq('company_id', companyId),
+  ]);
+
+  const outstanding = (invoices || [])
+    .filter((i) => i.status === 'sent')
+    .reduce((s, i) => s + i.total, 0);
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-semibold mb-2">TAYL Automation Platform</h1>
-      <p className="opacity-70 mb-6">
-        Multi-tenant — each business gets their own login, data, and connects their own
-        Razorpay account for payments.
-      </p>
-      <ul className="text-sm space-y-1 opacity-80">
-        <li>✅ Multi-tenant database — every business's data is isolated (RLS enforced)</li>
-        <li>✅ Sign up / log in — each business gets its own account</li>
-        <li>✅ Quote &amp; proposal calculator — create, accept, auto-drafts invoice + task</li>
-        <li>✅ Invoicing — each business connects their own Razorpay account in Settings (test-mode "Mark as Paid" available until then)</li>
-        <li>✅ Task automation board — kanban view, auto-created tasks, comments</li>
-        <li>✅ AI estimate generator — describe a job, get a priced estimate from your own catalog, approve to create a quote</li>
-        <li>✅ Billing structure — 14-day trial, plan tiers, test-mode subscribe (real payment collection pending your own gateway account)</li>
-        <li>⏳ Landing page + final polish — next session</li>
-      </ul>
-      {!user && (
-        <div className="mt-6 flex gap-3">
-          <a href="/signup" className="bg-white text-black rounded px-4 py-2 text-sm font-medium">
-            Sign up
-          </a>
-          <a href="/login" className="border border-white/20 rounded px-4 py-2 text-sm">
-            Log in
-          </a>
-        </div>
-      )}
+      <h1 className="text-xl font-semibold mb-6">Dashboard</h1>
+
+      <div className="grid grid-cols-3 gap-3 mb-8 text-sm">
+        <a href="/tasks" className="border border-white/10 rounded px-4 py-3 hover:border-white/30">
+          <div className="opacity-60">Open tasks</div>
+          <div className="text-2xl font-semibold">{openTasks || 0}</div>
+        </a>
+        <a href="/quotes" className="border border-white/10 rounded px-4 py-3 hover:border-white/30">
+          <div className="opacity-60">Draft quotes</div>
+          <div className="text-2xl font-semibold">{draftQuotes || 0}</div>
+        </a>
+        <a href="/invoices" className="border border-white/10 rounded px-4 py-3 hover:border-white/30">
+          <div className="opacity-60">Outstanding</div>
+          <div className="text-2xl font-semibold">₹{outstanding.toFixed(0)}</div>
+        </a>
+      </div>
+
+      <div className="flex gap-3 text-sm">
+        <a href="/quotes/new" className="bg-white text-black rounded px-4 py-2 font-medium">
+          + New Quote
+        </a>
+        <a href="/estimates" className="border border-white/20 rounded px-4 py-2">
+          AI Estimate
+        </a>
+      </div>
     </div>
   );
 }
