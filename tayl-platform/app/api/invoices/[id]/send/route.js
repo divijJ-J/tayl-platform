@@ -8,20 +8,17 @@ export async function POST(request, { params }) {
   const { companyId } = await getCurrentCompanyId();
   if (!companyId) return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
 
-  const { data: invoice, error: invErr } = await supabaseAdmin
-    .from('invoices')
-    .select('*, customers(name, email)')
-    .eq('id', id)
-    .eq('company_id', companyId)
-    .single();
+  const [{ data: invoice, error: invErr }, { data: gateway }] = await Promise.all([
+    supabaseAdmin
+      .from('invoices')
+      .select('*, customers(name, email)')
+      .eq('id', id)
+      .eq('company_id', companyId)
+      .single(),
+    supabaseAdmin.from('payment_gateway_keys').select('*').eq('company_id', companyId).maybeSingle(),
+  ]);
 
   if (invErr || !invoice) return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
-
-  const { data: gateway } = await supabaseAdmin
-    .from('payment_gateway_keys')
-    .select('*')
-    .eq('company_id', companyId)
-    .maybeSingle();
 
   if (!gateway?.key_id || !gateway?.key_secret) {
     return NextResponse.json(

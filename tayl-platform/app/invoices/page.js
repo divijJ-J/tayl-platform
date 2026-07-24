@@ -13,16 +13,14 @@ export default async function InvoicesPage() {
   const { user, companyId } = await getCurrentCompanyId();
   if (!user) redirect('/login');
 
-  const { data: invoices, error } = await supabaseAdmin
-    .from('invoices')
-    .select('*')
-    .eq('company_id', companyId)
-    .order('created_at', { ascending: false });
-
-  const { data: customers } = await supabaseAdmin
-    .from('customers')
-    .select('id, name')
-    .eq('company_id', companyId);
+  const [{ data: invoices, error }, { data: customers }] = await Promise.all([
+    supabaseAdmin
+      .from('invoices')
+      .select('*')
+      .eq('company_id', companyId)
+      .order('created_at', { ascending: false }),
+    supabaseAdmin.from('customers').select('id, name').eq('company_id', companyId),
+  ]);
   const customerMap = Object.fromEntries((customers || []).map((c) => [c.id, c]));
 
   const paid = invoices?.filter((i) => i.status === 'paid') || [];

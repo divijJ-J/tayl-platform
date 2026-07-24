@@ -18,23 +18,20 @@ export default async function TasksPage() {
   const { user, companyId } = await getCurrentCompanyId();
   if (!user) redirect('/login');
 
-  const { data: tasks, error } = await supabaseAdmin
-    .from('tasks')
-    .select('*')
-    .eq('company_id', companyId)
-    .order('created_at', { ascending: false });
-
-  const { data: customers } = await supabaseAdmin
-    .from('customers')
-    .select('id, name')
-    .eq('company_id', companyId);
+  const [{ data: tasks, error }, { data: customers }, { data: comments }] = await Promise.all([
+    supabaseAdmin
+      .from('tasks')
+      .select('*')
+      .eq('company_id', companyId)
+      .order('created_at', { ascending: false }),
+    supabaseAdmin.from('customers').select('id, name').eq('company_id', companyId),
+    supabaseAdmin
+      .from('task_comments')
+      .select('*')
+      .eq('company_id', companyId)
+      .order('created_at', { ascending: true }),
+  ]);
   const customerMap = Object.fromEntries((customers || []).map((c) => [c.id, c]));
-
-  const { data: comments } = await supabaseAdmin
-    .from('task_comments')
-    .select('*')
-    .eq('company_id', companyId)
-    .order('created_at', { ascending: true });
 
   const commentsByTask = {};
   (comments || []).forEach((c) => {

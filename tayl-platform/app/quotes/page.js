@@ -12,16 +12,14 @@ export default async function QuotesPage() {
   const { user, companyId } = await getCurrentCompanyId();
   if (!user) redirect('/login');
 
-  const { data: quotes, error: quotesErr } = await supabaseAdmin
-    .from('quotes')
-    .select('*')
-    .eq('company_id', companyId)
-    .order('created_at', { ascending: false });
-
-  const { data: customers } = await supabaseAdmin
-    .from('customers')
-    .select('id, name')
-    .eq('company_id', companyId);
+  const [{ data: quotes, error: quotesErr }, { data: customers }] = await Promise.all([
+    supabaseAdmin
+      .from('quotes')
+      .select('*')
+      .eq('company_id', companyId)
+      .order('created_at', { ascending: false }),
+    supabaseAdmin.from('customers').select('id, name').eq('company_id', companyId),
+  ]);
   const customerMap = Object.fromEntries((customers || []).map((c) => [c.id, c]));
 
   return (
