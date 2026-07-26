@@ -31,10 +31,22 @@ export async function POST(request) {
     );
   }
 
+  const { data: knowledge } = await supabaseAdmin
+    .from('knowledge_sources')
+    .select('title, content')
+    .eq('company_id', companyId);
+
+  const knowledgeBlock =
+    knowledge && knowledge.length > 0
+      ? `\n\nBusiness knowledge base (company policies, past job notes, standard practices — use this to make the estimate more accurate and to inform your notes/flagged_concerns, but never invent a price not in the catalog above):\n${knowledge
+          .map((k) => `--- ${k.title} ---\n${k.content}`)
+          .join('\n\n')}`
+      : '';
+
   const systemPrompt = `You are a pricing estimator for a service business. You are given the business's pricing catalog and a description of a job a customer wants done. Your job: pick the most relevant catalog items, estimate reasonable quantities, and produce a structured estimate.
 
 Pricing catalog (only use these, do not invent services or prices):
-${JSON.stringify(services, null, 2)}
+${JSON.stringify(services, null, 2)}${knowledgeBlock}
 
 Respond with ONLY valid JSON, no other text, in exactly this shape:
 {
