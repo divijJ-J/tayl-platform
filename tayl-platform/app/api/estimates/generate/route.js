@@ -7,7 +7,7 @@ export async function POST(request) {
   const { companyId } = await getCurrentCompanyId();
   if (!companyId) return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
 
-  const { customer_description } = await request.json();
+  const { customer_description, customer_id } = await request.json();
   if (!customer_description) {
     return NextResponse.json({ error: 'Describe the job first' }, { status: 400 });
   }
@@ -43,10 +43,24 @@ export async function POST(request) {
           .join('\n\n')}`
       : '';
 
+  let customerBlock = '';
+  if (customer_id) {
+    const { data: customer } = await supabaseAdmin
+      .from('customers')
+      .select('name, ai_summary')
+      .eq('id', customer_id)
+      .eq('company_id', companyId)
+      .maybeSingle();
+
+    if (customer?.ai_summary) {
+      customerBlock = `\n\nWhat we know about this specific customer (${customer.name}) from past interactions — use this for tone and to flag anything relevant, but never invent a price not in the catalog above:\n${customer.ai_summary}`;
+    }
+  }
+
   const systemPrompt = `You are a pricing estimator for a service business. You are given the business's pricing catalog and a description of a job a customer wants done. Your job: pick the most relevant catalog items, estimate reasonable quantities, and produce a structured estimate.
 
 Pricing catalog (only use these, do not invent services or prices):
-${JSON.stringify(services, null, 2)}${knowledgeBlock}
+${JSON.stringify(services, null, 2)}${knowledgeBlock}${customerBlock}
 
 Respond with ONLY valid JSON, no other text, in exactly this shape:
 {

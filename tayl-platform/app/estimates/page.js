@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function EstimatesPage() {
@@ -7,10 +7,51 @@ export default function EstimatesPage() {
   const [description, setDescription] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomerId, setSelectedCustomerId] = useState('');
   const [estimate, setEstimate] = useState(null);
   const [generating, setGenerating] = useState(false);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
+  const [listening, setListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    fetch('/api/customers')
+      .then((r) => r.json())
+      .then((data) => setCustomers(data.customers || []));
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      setVoiceSupported(true);
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        setDescription((prev) => (prev ? prev + ' ' : '') + transcript);
+      };
+      recognition.onend = () => setListening(false);
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return;
+    if (listening) {
+      recognitionRef.current.stop();
+      setListening(false);
+    } else {
+      recognitionRef.current.start();
+      setListening(true);
+    }
+  };
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -21,7 +62,10 @@ export default function EstimatesPage() {
       const res = await fetch('/api/estimates/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customer_description: description }),
+        body: JSON.stringify({
+          customer_description: description,
+          customer_id: selectedCustomerId || null,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -78,14 +122,50 @@ export default function EstimatesPage() {
       </p>
 
       <form onSubmit={handleGenerate} className="space-y-3 mb-6">
-        <textarea
-          required
-          rows={3}
-          placeholder="e.g. Customer wants their vintage watch strap replaced and the crystal polished"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
-        />
+        {customers.length > 0 && (
+          <div>
+            <label className="text-xs opacity-60 block mb-1">
+              Link to existing customer (optional — uses their history for a sharper estimate)
+            </label>
+            <select
+              value={selectedCustomerId}
+              onChange={(e) => setSelectedCustomerId(e.target.value)}
+              className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+            >
+              <option value="">None</option>
+              {customers.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="relative">
+          <textarea
+            required
+            rows={3}
+            placeholder="e.g. Customer wants their vintage watch strap replaced and the crystal polished"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm pr-12"
+          />
+          {voiceSupported && (
+            <button
+              type="button"
+              onClick={toggleListening}
+              title={listening ? 'Stop recording' : 'Speak instead of typing'}
+              className={`absolute right-2 top-2 rounded-full w-8 h-8 flex items-center justify-center text-sm border ${
+                listening ? 'bg-red-500 border-red-500 animate-pulse' : 'border-white/20 hover:bg-white/10'
+              }`}
+            >
+              🎤
+            </button>
+          )}
+        </div>
+        {listening && <p className="text-xs opacity-50">Listening... click the mic again to stop.</p>}
+
         <button
           type="submit"
           disabled={generating}

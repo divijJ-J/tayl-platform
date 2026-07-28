@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 export default function TaskCard({ task, customerName, comments, columns }) {
   const router = useRouter();
   const [status, setStatus] = useState(task.status);
+  const [dueDate, setDueDate] = useState(task.due_date || '');
+  const [syncing, setSyncing] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -17,6 +19,21 @@ export default function TaskCard({ task, customerName, comments, columns }) {
       body: JSON.stringify({ status: newStatus }),
     });
     router.refresh();
+  };
+
+  const handleDueDateChange = async (newDate) => {
+    setDueDate(newDate);
+    setSyncing(true);
+    try {
+      await fetch(`/api/tasks/${task.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ due_date: newDate }),
+      });
+      router.refresh();
+    } finally {
+      setSyncing(false);
+    }
   };
 
   const handleAddComment = async (e) => {
@@ -55,6 +72,19 @@ export default function TaskCard({ task, customerName, comments, columns }) {
           </option>
         ))}
       </select>
+
+      <div className="mt-2 flex items-center gap-2">
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => handleDueDateChange(e.target.value)}
+          className="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1 text-xs"
+        />
+        {syncing && <span className="text-xs opacity-40">syncing...</span>}
+        {!syncing && task.google_event_id && (
+          <span className="text-xs opacity-40" title="Synced to Google Calendar">📅</span>
+        )}
+      </div>
 
       <button
         onClick={() => setShowComments(!showComments)}

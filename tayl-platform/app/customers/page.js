@@ -33,9 +33,17 @@ export default async function CustomersPage() {
       {customers && customers.length > 0 && (
         <ul className="space-y-2">
           {customers.map((c) => (
-            <li key={c.id} className="border border-white/10 rounded px-4 py-2">
-              <div className="font-medium">{c.name}</div>
-              <div className="text-sm opacity-60">{c.email}</div>
+            <li key={c.id}>
+              <a
+                href={`/customers/${c.id}`}
+                className="block border border-white/10 rounded px-4 py-2 hover:bg-white/5"
+              >
+                <div className="font-medium">{c.name}</div>
+                <div className="text-sm opacity-60">{c.email}</div>
+                {c.ai_summary && (
+                  <div className="text-xs opacity-40 mt-1 truncate">{c.ai_summary}</div>
+                )}
+              </a>
             </li>
           ))}
         </ul>
