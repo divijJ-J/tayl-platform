@@ -25,23 +25,67 @@ export default function Landing() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Hero */}
-      <section className="pt-16 pb-12">
-        <p className="text-xs tracking-[0.2em] uppercase opacity-50 mb-4">For service businesses</p>
-        <h1 className="font-display text-4xl md:text-5xl font-semibold leading-tight mb-5 max-w-2xl">
-          The paperwork runs itself. You run the business.
-        </h1>
-        <p className="text-lg opacity-70 max-w-xl mb-8">
-          TAYL turns one accepted quote into an invoice, a payment link, and a tracked task —
-          without you touching a spreadsheet.
-        </p>
-        <div className="flex gap-3">
-          <a href="/signup" className="btn-primary rounded px-5 py-2.5 text-sm font-medium">
-            Start free — 14 days
-          </a>
-          <a href="/login" className="border border-slate-300 rounded px-5 py-2.5 text-sm">
-            Log in
-          </a>
+      <section className="pt-16 pb-12 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <p className="text-xs tracking-[0.2em] uppercase opacity-50 mb-4">For service businesses</p>
+          <h1 className="font-display text-4xl md:text-5xl font-semibold leading-tight mb-5">
+            The paperwork runs itself. You run the business.
+          </h1>
+          <p className="text-lg opacity-70 mb-8">
+            One accepted quote becomes an invoice, a payment link, and a tracked task — automatically.
+            An AI receptionist answers your customers, remembers every conversation, and prices estimates
+            from your own rates.
+          </p>
+          <div className="flex gap-3 mb-6">
+            <a href="/signup" className="btn-primary rounded-full px-5 py-2.5 text-sm font-medium">
+              Start free — 14 days
+            </a>
+            <a href="/login" className="rounded-full px-5 py-2.5 text-sm border border-slate-300 hover:border-slate-400 transition-colors">
+              Log in
+            </a>
+          </div>
+          <p className="text-xs opacity-40">Quotes · Invoices · Tasks · AI Estimates · Customer Memory · AI Chat Widget</p>
         </div>
+
+        {/* Signature: live demo panel, mirrors what a customer actually sees on your AI Chat Widget */}
+        <TiltCard>
+          <div className="surface-card rounded-2xl p-5 h-full">
+            <p className="text-[10.5px] tracking-[0.16em] uppercase mb-3" style={{ color: '#6366f1' }}>
+              Live Conversation
+            </p>
+            <div className="space-y-2 mb-3">
+              <div className="flex justify-end">
+                <div className="text-sm px-3 py-2 rounded-2xl rounded-br-sm bg-slate-100 max-w-[85%]">
+                  Do you have slots open this Thursday?
+                </div>
+              </div>
+              <div className="flex">
+                <div
+                  className="text-sm text-white px-3 py-2 rounded-2xl rounded-bl-sm max-w-[85%]"
+                  style={{ background: 'linear-gradient(90deg, #6366f1, #3b82f6)' }}
+                >
+                  Yes — 2pm and 4:30pm are open. Want me to pencil you in?
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <div className="text-sm px-3 py-2 rounded-2xl rounded-br-sm bg-slate-100 max-w-[85%]">
+                  4:30 works, I&apos;m Meera.
+                </div>
+              </div>
+              <div className="flex">
+                <div
+                  className="text-sm text-white px-3 py-2 rounded-2xl rounded-bl-sm max-w-[85%]"
+                  style={{ background: 'linear-gradient(90deg, #6366f1, #3b82f6)' }}
+                >
+                  Booked for 4:30pm, Meera — I&apos;ll have the team confirm shortly.
+                </div>
+              </div>
+            </div>
+            <p className="text-[11px] font-mono opacity-40 border-t border-slate-100 pt-2">
+              memory: name=Meera · intent=booking · slot=4:30pm
+            </p>
+          </div>
+        </TiltCard>
       </section>
 
       {/* Signature: the ledger chain */}
@@ -58,12 +102,14 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section className="grid md:grid-cols-2 gap-x-8 gap-y-10 mb-20">
+      <section className="grid md:grid-cols-2 gap-4 mb-20">
         {FEATURES.map((f) => (
-          <div key={f.title}>
-            <h3 className="font-medium mb-1.5">{f.title}</h3>
-            <p className="text-sm opacity-60 leading-relaxed">{f.body}</p>
-          </div>
+          <TiltCard key={f.title}>
+            <div className="surface-card rounded-2xl px-5 py-5 h-full">
+              <h3 className="font-medium mb-1.5">{f.title}</h3>
+              <p className="text-sm opacity-60 leading-relaxed">{f.body}</p>
+            </div>
+          </TiltCard>
         ))}
       </section>
 
