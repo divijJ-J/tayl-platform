@@ -25,14 +25,14 @@ export default async function CalendarSettingsPage({ searchParams }) {
       </p>
 
       {searchParams?.connected && (
-        <p className="text-sm text-green-400 mb-4">Connected successfully.</p>
+        <p className="text-sm text-green-600 mb-4">Connected successfully.</p>
       )}
       {searchParams?.error && (
-        <p className="text-sm text-red-400 mb-4">Couldn&apos;t connect: {searchParams.error}</p>
+        <p className="text-sm text-red-600 mb-4">Couldn&apos;t connect: {searchParams.error}</p>
       )}
 
       {connection ? (
-        <div className="border border-white/10 rounded px-4 py-3">
+        <div className="border border-slate-200 rounded px-4 py-3">
           <p className="text-sm">
             Connected as <span className="font-medium">{connection.google_email}</span>
           </p>
@@ -43,7 +43,7 @@ export default async function CalendarSettingsPage({ searchParams }) {
       ) : (
         <a
           href="/api/calendar/connect"
-          className="inline-block bg-white text-black rounded px-4 py-2 text-sm font-medium"
+          className="inline-block btn-primary rounded px-4 py-2 text-sm font-medium"
         >
           Connect Google Calendar
         </a>

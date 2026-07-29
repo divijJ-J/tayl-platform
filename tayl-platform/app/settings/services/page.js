@@ -57,19 +57,19 @@ export default function ServicesSettingsPage() {
         The services and prices here are what the AI Estimate Generator uses to price jobs — add your real offerings and rates.
       </p>
 
-      <form onSubmit={handleAdd} className="space-y-3 mb-6 border-b border-white/10 pb-6">
+      <form onSubmit={handleAdd} className="space-y-3 mb-6 border-b border-slate-200 pb-6">
         <input
           required
           placeholder="Service name (e.g. Watch strap replacement)"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+          className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
         />
         <input
           placeholder="Description (optional)"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+          className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
         />
         <div className="flex gap-2">
           <input
@@ -78,23 +78,23 @@ export default function ServicesSettingsPage() {
             placeholder="Price"
             value={unitPrice}
             onChange={(e) => setUnitPrice(e.target.value)}
-            className="flex-1 bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+            className="flex-1 bg-white border border-slate-200 rounded px-3 py-2 text-sm"
           />
           <select
             value={unit}
             onChange={(e) => setUnit(e.target.value)}
-            className="bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+            className="bg-white border border-slate-200 rounded px-3 py-2 text-sm"
           >
             <option value="each">each</option>
             <option value="hour">per hour</option>
             <option value="sqft">per sqft</option>
           </select>
         </div>
-        {error && <p className="text-red-400 text-sm">{error}</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
         <button
           type="submit"
           disabled={loading}
-          className="bg-white text-black rounded px-4 py-2 text-sm font-medium disabled:opacity-50"
+          className="btn-primary rounded px-4 py-2 text-sm font-medium disabled:opacity-50"
         >
           {loading ? 'Adding...' : 'Add Service'}
         </button>
@@ -105,12 +105,12 @@ export default function ServicesSettingsPage() {
           <p className="text-sm opacity-60">No services yet — add your first one above.</p>
         )}
         {services.map((s) => (
-          <div key={s.id} className="flex justify-between items-center border border-white/10 rounded px-3 py-2 text-sm">
+          <div key={s.id} className="flex justify-between items-center border border-slate-200 rounded px-3 py-2 text-sm">
             <div>
               <div className="font-medium">{s.name}</div>
               <div className="opacity-60 text-xs">₹{s.unit_price} / {s.unit}</div>
             </div>
-            <button onClick={() => handleDelete(s.id)} className="text-red-400 text-xs">
+            <button onClick={() => handleDelete(s.id)} className="text-red-600 text-xs">
               Remove
             </button>
           </div>

@@ -48,7 +48,7 @@ export default function SignupPage() {
             required
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
-            className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 mt-1"
+            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1"
           />
         </div>
         <div>
@@ -58,7 +58,7 @@ export default function SignupPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 mt-1"
+            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1"
           />
         </div>
         <div>
@@ -69,14 +69,14 @@ export default function SignupPage() {
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 mt-1"
+            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1"
           />
         </div>
-        {error && <p className="text-red-400 text-sm">{error}</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-white text-black rounded px-4 py-2 font-medium disabled:opacity-50"
+          className="w-full btn-primary rounded px-4 py-2 font-medium disabled:opacity-50"
         >
           {loading ? 'Creating...' : 'Sign up'}
         </button>

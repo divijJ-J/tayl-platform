@@ -26,7 +26,7 @@ export default function SubscribeButton({ plan, current }) {
 
   if (current) {
     return (
-      <span className="block text-center text-sm bg-green-600/20 text-green-400 border border-green-600/40 rounded px-3 py-1.5">
+      <span className="block text-center text-sm bg-green-600/20 text-green-600 border border-green-600/40 rounded px-3 py-1.5">
         Current Plan
       </span>
     );
@@ -36,7 +36,7 @@ export default function SubscribeButton({ plan, current }) {
     <button
       onClick={handleClick}
       disabled={loading}
-      className="w-full text-sm bg-white text-black rounded px-3 py-1.5 disabled:opacity-50"
+      className="w-full text-sm btn-primary rounded px-3 py-1.5 disabled:opacity-50"
     >
       {loading ? 'Processing...' : 'Subscribe (test)'}
     </button>

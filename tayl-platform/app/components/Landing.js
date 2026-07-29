@@ -25,7 +25,7 @@ export default function Landing() {
       {/* Hero */}
       <section className="pt-16 pb-12">
         <p className="text-xs tracking-[0.2em] uppercase opacity-50 mb-4">For service businesses</p>
-        <h1 className="text-4xl md:text-5xl font-semibold leading-tight mb-5 max-w-2xl">
+        <h1 className="text-4xl md:text-5xl leading-tight mb-5 max-w-2xl" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
           The paperwork runs itself. You run the business.
         </h1>
         <p className="text-lg opacity-70 max-w-xl mb-8">
@@ -33,21 +33,21 @@ export default function Landing() {
           without you touching a spreadsheet.
         </p>
         <div className="flex gap-3">
-          <a href="/signup" className="bg-white text-black rounded px-5 py-2.5 text-sm font-medium">
+          <a href="/signup" className="btn-primary rounded px-5 py-2.5 text-sm font-medium">
             Start free — 14 days
           </a>
-          <a href="/login" className="border border-white/20 rounded px-5 py-2.5 text-sm">
+          <a href="/login" className="border border-slate-300 rounded px-5 py-2.5 text-sm">
             Log in
           </a>
         </div>
       </section>
 
       {/* Signature: the ledger chain */}
-      <section className="border-y border-white/10 py-8 mb-16 overflow-x-auto">
+      <section className="border-y border-slate-200 py-8 mb-16 overflow-x-auto">
         <div className="flex items-center gap-3 text-sm font-mono whitespace-nowrap">
           {STEPS.map((step, i) => (
             <div key={step} className="flex items-center gap-3">
-              <span className="border border-white/15 rounded px-3 py-1.5 opacity-80">{step}</span>
+              <span className="border border-slate-200 rounded px-3 py-1.5 opacity-80">{step}</span>
               {i < STEPS.length - 1 && <span className="opacity-30">→</span>}
             </div>
           ))}
@@ -69,7 +69,7 @@ export default function Landing() {
       <section className="mb-20">
         <h2 className="text-xl font-semibold mb-6">Pricing</h2>
         <div className="grid md:grid-cols-2 gap-4">
-          <div className="border border-white/10 rounded px-5 py-5">
+          <div className="border border-slate-200 rounded px-5 py-5">
             <div className="font-medium mb-1">Starter</div>
             <div className="text-3xl font-semibold mb-4">
               ₹999<span className="text-sm opacity-60 font-normal">/mo</span>
@@ -80,7 +80,7 @@ export default function Landing() {
               <li>Task board</li>
             </ul>
           </div>
-          <div className="border border-white/20 rounded px-5 py-5">
+          <div className="border border-slate-300 rounded px-5 py-5">
             <div className="font-medium mb-1">Pro</div>
             <div className="text-3xl font-semibold mb-4">
               ₹2,499<span className="text-sm opacity-60 font-normal">/mo</span>
@@ -96,9 +96,9 @@ export default function Landing() {
       </section>
 
       {/* Closing CTA */}
-      <section className="border-t border-white/10 py-12 text-center mb-8">
+      <section className="border-t border-slate-200 py-12 text-center mb-8">
         <h2 className="text-2xl font-semibold mb-3">Set it up once. Let it run.</h2>
-        <a href="/signup" className="inline-block bg-white text-black rounded px-6 py-3 text-sm font-medium">
+        <a href="/signup" className="inline-block btn-primary rounded px-6 py-3 text-sm font-medium">
           Start your free trial
         </a>
       </section>

@@ -82,33 +82,33 @@ export default function KnowledgeSettingsPage() {
         uses this alongside your pricing catalog to make sharper, better-informed estimates.
       </p>
 
-      <form onSubmit={handleAdd} className="space-y-3 mb-4 border-b border-white/10 pb-6">
+      <form onSubmit={handleAdd} className="space-y-3 mb-4 border-b border-slate-200 pb-6">
         <input
-          className="w-full bg-transparent border border-white/20 rounded px-3 py-2 text-sm"
+          className="w-full bg-transparent border border-slate-300 rounded px-3 py-2 text-sm"
           placeholder="Title (e.g. Warranty Policy)"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
         <textarea
-          className="w-full bg-transparent border border-white/20 rounded px-3 py-2 text-sm"
+          className="w-full bg-transparent border border-slate-300 rounded px-3 py-2 text-sm"
           placeholder="Paste text here..."
           rows={4}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
         />
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
           disabled={loading}
-          className="border border-white/20 rounded px-4 py-2 text-sm hover:bg-white/10 disabled:opacity-50"
+          className="border border-slate-300 rounded px-4 py-2 text-sm hover:bg-slate-100 disabled:opacity-50"
         >
           {loading ? 'Adding...' : 'Add Text Entry'}
         </button>
       </form>
 
-      <div className="mb-6 pb-6 border-b border-white/10">
+      <div className="mb-6 pb-6 border-b border-slate-200">
         <label className="text-sm opacity-70 block mb-2">Or upload a .txt / .md file:</label>
         <input
           ref={fileInputRef}
@@ -123,7 +123,7 @@ export default function KnowledgeSettingsPage() {
       <div className="space-y-3">
         {sources.length === 0 && <p className="text-sm opacity-50">No knowledge added yet.</p>}
         {sources.map((s) => (
-          <div key={s.id} className="border border-white/10 rounded px-3 py-2 flex justify-between items-start gap-3">
+          <div key={s.id} className="border border-slate-200 rounded px-3 py-2 flex justify-between items-start gap-3">
             <div className="min-w-0">
               <p className="text-sm font-medium">
                 {s.title} <span className="opacity-40 text-xs">({s.source_type})</span>

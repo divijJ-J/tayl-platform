@@ -24,7 +24,7 @@ export default function SendButton({ invoiceId }) {
     <button
       onClick={handleSend}
       disabled={loading}
-      className="text-sm bg-white text-black rounded px-3 py-1.5 disabled:opacity-50"
+      className="text-sm btn-primary rounded px-3 py-1.5 disabled:opacity-50"
     >
       {loading ? 'Sending...' : 'Send & Get Payment Link'}
     </button>

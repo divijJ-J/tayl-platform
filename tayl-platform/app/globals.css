@@ -2,7 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #1a1b1f;
+  --ink-soft: #52525b;
+  --canvas: #f8f9fc;
+  --grad-a: #6366f1; /* indigo */
+  --grad-b: #3b82f6; /* blue */
+  --grad-c: #8b5cf6; /* violet */
+}
+
 body {
-  background: #0b0c10;
-  color: #f4f4f5;
+  background: var(--canvas);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(99, 102, 241, 0.07) 0%, transparent 42%),
+    radial-gradient(circle at 88% 18%, rgba(59, 130, 246, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Gradient wordmark / accent text */
+.grad-text {
+  background: linear-gradient(90deg, var(--grad-a), var(--grad-b) 55%, var(--grad-c));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Primary action button — used wherever the app previously had bg-white text-black */
+.btn-primary {
+  background: linear-gradient(90deg, var(--grad-a), var(--grad-b));
+  color: #fff;
+  border: none;
+  box-shadow: 0 1px 2px rgba(30, 41, 59, 0.06), 0 4px 14px rgba(99, 102, 241, 0.18);
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 1px 2px rgba(30, 41, 59, 0.08), 0 8px 22px rgba(99, 102, 241, 0.28);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+}
+
+/* Soft elevated card surface, used by nav + can be reused anywhere */
+.surface-card {
+  background: #ffffff;
+  border: 1px solid #e7e9f2;
+  box-shadow: 0 1px 2px rgba(30, 41, 59, 0.04), 0 8px 24px rgba(30, 41, 59, 0.04);
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.18);
 }

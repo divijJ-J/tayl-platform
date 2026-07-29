@@ -63,18 +63,18 @@ export default function CustomerDetailPage() {
       <h1 className="text-xl font-semibold mb-1">{customer.name}</h1>
       <p className="text-sm opacity-60 mb-6">{customer.email || 'No email on file'}</p>
 
-      <div className="border border-white/10 rounded px-4 py-3 mb-6">
+      <div className="border border-slate-200 rounded px-4 py-3 mb-6">
         <div className="flex justify-between items-start gap-3 mb-2">
           <h2 className="text-sm font-medium opacity-80">AI Memory Summary</h2>
           <button
             onClick={handleSummarize}
             disabled={summarizing}
-            className="text-xs border border-white/20 rounded px-3 py-1 hover:bg-white/10 disabled:opacity-50 shrink-0"
+            className="text-xs border border-slate-300 rounded px-3 py-1 hover:bg-slate-100 disabled:opacity-50 shrink-0"
           >
             {summarizing ? 'Thinking...' : 'Refresh Summary'}
           </button>
         </div>
-        {error && <p className="text-xs text-red-400 mb-2">{error}</p>}
+        {error && <p className="text-xs text-red-600 mb-2">{error}</p>}
         {customer.ai_summary ? (
           <>
             <p className="text-sm opacity-90">{customer.ai_summary}</p>
@@ -93,13 +93,13 @@ export default function CustomerDetailPage() {
           rows={2}
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+          className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
           placeholder="e.g. Prefers morning appointments, allergic to latex gloves"
         />
         <button
           type="submit"
           disabled={addingNote}
-          className="border border-white/20 rounded px-4 py-2 text-sm hover:bg-white/10 disabled:opacity-50"
+          className="border border-slate-300 rounded px-4 py-2 text-sm hover:bg-slate-100 disabled:opacity-50"
         >
           {addingNote ? 'Adding...' : 'Add Note'}
         </button>
@@ -109,7 +109,7 @@ export default function CustomerDetailPage() {
       <div className="space-y-2">
         {log.length === 0 && <p className="text-sm opacity-50">No history yet.</p>}
         {log.map((l) => (
-          <div key={l.id} className="border border-white/10 rounded px-3 py-2 text-sm">
+          <div key={l.id} className="border border-slate-200 rounded px-3 py-2 text-sm">
             <div className="flex justify-between text-xs opacity-40 mb-1">
               <span>{l.type}</span>
               <span>{new Date(l.created_at).toLocaleString()}</span>

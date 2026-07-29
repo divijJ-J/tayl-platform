@@ -54,7 +54,7 @@ export default function TaskCard({ task, customerName, comments, columns }) {
   };
 
   return (
-    <div className="border border-white/10 rounded px-3 py-2 text-sm">
+    <div className="border border-slate-200 rounded px-3 py-2 text-sm">
       <div className="font-medium">{task.title}</div>
       {customerName && <div className="text-xs opacity-60 mt-0.5">{customerName}</div>}
       {task.trigger_type && (
@@ -64,7 +64,7 @@ export default function TaskCard({ task, customerName, comments, columns }) {
       <select
         value={status}
         onChange={(e) => handleStatusChange(e.target.value)}
-        className="w-full mt-2 bg-black/40 border border-white/10 rounded px-2 py-1 text-xs"
+        className="w-full mt-2 bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs"
       >
         {columns.map((c) => (
           <option key={c.key} value={c.key}>
@@ -78,7 +78,7 @@ export default function TaskCard({ task, customerName, comments, columns }) {
           type="date"
           value={dueDate}
           onChange={(e) => handleDueDateChange(e.target.value)}
-          className="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1 text-xs"
+          className="flex-1 bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs"
         />
         {syncing && <span className="text-xs opacity-40">syncing...</span>}
         {!syncing && task.google_event_id && (
@@ -96,7 +96,7 @@ export default function TaskCard({ task, customerName, comments, columns }) {
       {showComments && (
         <div className="mt-2 space-y-1">
           {comments.map((c) => (
-            <div key={c.id} className="text-xs bg-black/30 rounded px-2 py-1">
+            <div key={c.id} className="text-xs bg-white rounded px-2 py-1">
               {c.comment}
             </div>
           ))}
@@ -105,12 +105,12 @@ export default function TaskCard({ task, customerName, comments, columns }) {
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Add a note..."
-              className="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1 text-xs"
+              className="flex-1 bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs"
             />
             <button
               type="submit"
               disabled={submitting}
-              className="text-xs bg-white text-black rounded px-2 py-1 disabled:opacity-50"
+              className="text-xs btn-primary rounded px-2 py-1 disabled:opacity-50"
             >
               Add
             </button>

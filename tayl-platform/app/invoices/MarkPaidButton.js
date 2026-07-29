@@ -24,7 +24,7 @@ export default function MarkPaidButton({ invoiceId }) {
     <button
       onClick={handleClick}
       disabled={loading}
-      className="text-sm bg-yellow-600/20 text-yellow-400 border border-yellow-600/40 rounded px-3 py-1.5 disabled:opacity-50"
+      className="text-sm bg-yellow-600/20 text-amber-600 border border-yellow-600/40 rounded px-3 py-1.5 disabled:opacity-50"
     >
       {loading ? 'Marking...' : 'Mark as Paid (test)'}
     </button>

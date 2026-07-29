@@ -69,7 +69,7 @@ export default function ChatSettingsPage() {
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             placeholder="your-business-name"
-            className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
           />
         </div>
 
@@ -78,7 +78,7 @@ export default function ChatSettingsPage() {
           <input
             value={greeting}
             onChange={(e) => setGreeting(e.target.value)}
-            className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
           />
         </div>
 
@@ -88,24 +88,24 @@ export default function ChatSettingsPage() {
             rows={3}
             value={persona}
             onChange={(e) => setPersona(e.target.value)}
-            className="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm"
+            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
           />
         </div>
 
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {saved && <p className="text-sm text-green-400">Saved.</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        {saved && <p className="text-sm text-green-600">Saved.</p>}
 
         <button
           type="submit"
           disabled={saving}
-          className="bg-white text-black rounded px-4 py-2 text-sm font-medium disabled:opacity-50"
+          className="btn-primary rounded px-4 py-2 text-sm font-medium disabled:opacity-50"
         >
           {saving ? 'Saving...' : 'Save'}
         </button>
       </form>
 
       {chatUrl && (
-        <div className="mt-6 border border-white/10 rounded px-4 py-3">
+        <div className="mt-6 border border-slate-200 rounded px-4 py-3">
           <p className="text-sm opacity-70 mb-1">Your chat link:</p>
           <a href={chatUrl} target="_blank" rel="noreferrer" className="text-sm underline break-all">
             {chatUrl}
