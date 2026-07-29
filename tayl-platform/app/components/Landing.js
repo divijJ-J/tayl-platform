@@ -1,3 +1,5 @@
+import TiltCard from './TiltCard';
+
 const FEATURES = [
   {
     title: 'Quotes that become invoices',
@@ -25,7 +27,7 @@ export default function Landing() {
       {/* Hero */}
       <section className="pt-16 pb-12">
         <p className="text-xs tracking-[0.2em] uppercase opacity-50 mb-4">For service businesses</p>
-        <h1 className="text-4xl md:text-5xl leading-tight mb-5 max-w-2xl" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
+        <h1 className="font-display text-4xl md:text-5xl font-semibold leading-tight mb-5 max-w-2xl">
           The paperwork runs itself. You run the business.
         </h1>
         <p className="text-lg opacity-70 max-w-xl mb-8">
@@ -69,28 +71,32 @@ export default function Landing() {
       <section className="mb-20">
         <h2 className="text-xl font-semibold mb-6">Pricing</h2>
         <div className="grid md:grid-cols-2 gap-4">
-          <div className="border border-slate-200 rounded px-5 py-5">
-            <div className="font-medium mb-1">Starter</div>
-            <div className="text-3xl font-semibold mb-4">
-              ₹999<span className="text-sm opacity-60 font-normal">/mo</span>
+          <TiltCard>
+            <div className="surface-card rounded-2xl px-5 py-5 h-full">
+              <div className="font-medium mb-1">Starter</div>
+              <div className="text-3xl font-semibold mb-4">
+                ₹999<span className="text-sm opacity-60 font-normal">/mo</span>
+              </div>
+              <ul className="text-sm opacity-70 space-y-1.5">
+                <li>Up to 50 customers</li>
+                <li>Quotes &amp; invoicing</li>
+                <li>Task board</li>
+              </ul>
             </div>
-            <ul className="text-sm opacity-70 space-y-1.5">
-              <li>Up to 50 customers</li>
-              <li>Quotes &amp; invoicing</li>
-              <li>Task board</li>
-            </ul>
-          </div>
-          <div className="border border-slate-300 rounded px-5 py-5">
-            <div className="font-medium mb-1">Pro</div>
-            <div className="text-3xl font-semibold mb-4">
-              ₹2,499<span className="text-sm opacity-60 font-normal">/mo</span>
+          </TiltCard>
+          <TiltCard>
+            <div className="surface-card rounded-2xl px-5 py-5 h-full" style={{ borderColor: '#c7d2fe' }}>
+              <div className="font-medium mb-1">Pro</div>
+              <div className="text-3xl font-semibold mb-4">
+                ₹2,499<span className="text-sm opacity-60 font-normal">/mo</span>
+              </div>
+              <ul className="text-sm opacity-70 space-y-1.5">
+                <li>Unlimited customers</li>
+                <li>AI Estimate Generator</li>
+                <li>Priority support</li>
+              </ul>
             </div>
-            <ul className="text-sm opacity-70 space-y-1.5">
-              <li>Unlimited customers</li>
-              <li>AI Estimate Generator</li>
-              <li>Priority support</li>
-            </ul>
-          </div>
+          </TiltCard>
         </div>
         <p className="text-xs opacity-40 mt-4">Every plan starts with a 14-day free trial. No card required to start.</p>
       </section>

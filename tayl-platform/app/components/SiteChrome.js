@@ -1,6 +1,7 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import SignOutButton from './SignOutButton';
+import CursorGlow from './CursorGlow';
 
 const LINKS = [
   { href: '/customers', label: 'Customers' },
@@ -27,6 +28,7 @@ export default function SiteChrome({ user, children }) {
 
   return (
     <div className="min-h-screen">
+      <CursorGlow />
       <nav className="surface-card sticky top-0 z-40 mx-3 mt-3 md:mx-6 md:mt-4 rounded-2xl px-4 md:px-5 py-3 flex items-center gap-1 md:gap-2 overflow-x-auto">
         <a href="/" className="flex items-center gap-1.5 pr-3 mr-1 shrink-0">
           <span
@@ -34,9 +36,7 @@ export default function SiteChrome({ user, children }) {
             className="w-2 h-2 rounded-full shrink-0"
             style={{ background: 'linear-gradient(135deg, #6366f1, #3b82f6)' }}
           />
-          <span className="grad-text font-semibold text-[15px]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            TAYL
-          </span>
+          <span className="grad-text font-display font-semibold text-[15px]">TAYL</span>
         </a>
 
         {user ? (
