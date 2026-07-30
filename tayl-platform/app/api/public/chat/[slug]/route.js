@@ -1,5 +1,5 @@
 import { supabaseAdmin } from '../../../../../lib/supabase';
-import { callGemini } from '../../../../../lib/gemini';
+import { findOrCreateCustomer, generateAIReply, logToCustomerHistory } from '../../../../../lib/ai-conversation';
 import { NextResponse } from 'next/server';
 
 export async function POST(request, { params }) {
@@ -27,7 +27,6 @@ export async function POST(request, { params }) {
     );
   }
 
-  // Find or create the conversation
   let conversation;
   if (conversation_id) {
     const { data } = await supabaseAdmin
@@ -40,32 +39,9 @@ export async function POST(request, { params }) {
   }
 
   if (!conversation) {
-    // Try to match an existing customer by email so this chat feeds
-    // straight into their memory (Phase 9), instead of starting a silo.
-    let customerId = null;
-    if (visitor_email) {
-      const { data: existingCustomer } = await supabaseAdmin
-        .from('customers')
-        .select('id')
-        .eq('company_id', company.id)
-        .ilike('email', visitor_email)
-        .maybeSingle();
-
-      if (existingCustomer) {
-        customerId = existingCustomer.id;
-      } else {
-        const { data: newCustomer } = await supabaseAdmin
-          .from('customers')
-          .insert({
-            company_id: company.id,
-            name: visitor_name || visitor_email,
-            email: visitor_email,
-          })
-          .select('id')
-          .single();
-        customerId = newCustomer?.id || null;
-      }
-    }
+    const customerId = visitor_email
+      ? await findOrCreateCustomer(company.id, { name: visitor_name, email: visitor_email })
+      : null;
 
     const { data: newConvo, error: convoErr } = await supabaseAdmin
       .from('chat_conversations')
@@ -82,7 +58,6 @@ export async function POST(request, { params }) {
     conversation = newConvo;
   }
 
-  // Save the incoming visitor message
   await supabaseAdmin.from('chat_messages').insert({
     conversation_id: conversation.id,
     role: 'user',
@@ -99,7 +74,6 @@ export async function POST(request, { params }) {
     });
   }
 
-  // Recent history for context (last 10 messages)
   const { data: history } = await supabaseAdmin
     .from('chat_messages')
     .select('role, content')
@@ -108,35 +82,17 @@ export async function POST(request, { params }) {
     .limit(10);
 
   const orderedHistory = (history || []).reverse();
-
-  // Knowledge base context (Phase 8) — same source of truth as AI estimates
-  const { data: knowledge } = await supabaseAdmin
-    .from('knowledge_sources')
-    .select('title, content')
-    .eq('company_id', company.id);
-
-  const knowledgeBlock =
-    knowledge && knowledge.length > 0
-      ? `\n\nBusiness knowledge base:\n${knowledge.map((k) => `--- ${k.title} ---\n${k.content}`).join('\n\n')}`
-      : '';
-
-  const systemPrompt = `${company.chat_persona || 'You are a friendly, professional receptionist for this business.'}
-
-You work for: ${company.name}${knowledgeBlock}
-
-Keep replies short and conversational (2-4 sentences unless more detail is truly needed). Never invent prices, availability, or policies not present in the knowledge base above — if you don't know, say you'll have the team follow up.`;
-
   const conversationText = orderedHistory
     .map((m) => `${m.role === 'user' ? 'Customer' : 'You'}: ${m.content}`)
     .join('\n');
 
   try {
-    const reply = await callGemini(systemPrompt, conversationText);
+    const reply = await generateAIReply(company, conversationText, conversation.customer_id);
 
     await supabaseAdmin.from('chat_messages').insert({
       conversation_id: conversation.id,
       role: 'assistant',
-      content: reply.trim(),
+      content: reply,
     });
 
     if (conversation.customer_id) {
@@ -145,11 +101,11 @@ Keep replies short and conversational (2-4 sentences unless more detail is truly
         customer_id: conversation.customer_id,
         type: 'chat',
         subject: 'Website chat (AI reply)',
-        body: reply.trim(),
+        body: reply,
       });
     }
 
-    return NextResponse.json({ conversation_id: conversation.id, reply: reply.trim() });
+    return NextResponse.json({ conversation_id: conversation.id, reply });
   } catch (err) {
     return NextResponse.json({ error: `Chat failed: ${err.message}` }, { status: 500 });
   }

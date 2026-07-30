@@ -105,15 +105,29 @@ export default function ChatSettingsPage() {
       </form>
 
       {chatUrl && (
-        <div className="mt-6 border border-slate-200 rounded px-4 py-3">
-          <p className="text-sm opacity-70 mb-1">Your chat link:</p>
-          <a href={chatUrl} target="_blank" rel="noreferrer" className="text-sm underline break-all">
-            {chatUrl}
-          </a>
-          <p className="text-xs opacity-40 mt-2">
-            Share this directly, or embed it as an iframe on your website.
-          </p>
-        </div>
+        <>
+          <div className="mt-6 border border-slate-200 rounded px-4 py-3">
+            <p className="text-sm opacity-70 mb-1">Your chat link:</p>
+            <a href={chatUrl} target="_blank" rel="noreferrer" className="text-sm underline break-all">
+              {chatUrl}
+            </a>
+            <p className="text-xs opacity-40 mt-2">
+              Share this directly with customers.
+            </p>
+          </div>
+
+          <div className="mt-4 border border-slate-200 rounded px-4 py-3">
+            <p className="text-sm opacity-70 mb-2">
+              Or add it right on your own website — paste this before <code>&lt;/body&gt;</code>:
+            </p>
+            <pre className="bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs overflow-x-auto">
+{`<script src="${typeof window !== 'undefined' ? window.location.origin : ''}/widget.js" data-tayl-slug="${slug}" async></script>`}
+            </pre>
+            <p className="text-xs opacity-40 mt-2">
+              Adds a small chat bubble in the corner of your site — visitors never have to leave your page.
+            </p>
+          </div>
+        </>
       )}
     </div>
   );

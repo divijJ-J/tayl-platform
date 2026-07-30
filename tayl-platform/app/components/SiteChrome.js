@@ -13,6 +13,7 @@ const LINKS = [
   { href: '/settings/knowledge', label: 'Knowledge Base' },
   { href: '/settings/calendar', label: 'Calendar' },
   { href: '/settings/chat', label: 'Chat Widget' },
+  { href: '/settings/whatsapp', label: 'WhatsApp' },
   { href: '/billing', label: 'Billing' },
   { href: '/settings/payments', label: 'Payment Settings' },
 ];

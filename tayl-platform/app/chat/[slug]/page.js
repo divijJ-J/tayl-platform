@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 function BellIcon({ className, ringing, idle, style }) {
   return (
@@ -53,6 +53,8 @@ function DeskIllustration() {
 
 export default function PublicChatPage() {
   const { slug } = useParams();
+  const searchParams = useSearchParams();
+  const embedded = searchParams.get('embedded') === '1';
   const [companyName, setCompanyName] = useState('');
   const [greeting, setGreeting] = useState('');
   const [notFound, setNotFound] = useState(false);
@@ -175,6 +177,10 @@ export default function PublicChatPage() {
         0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
         30% { opacity: 1; transform: translateY(-2px); }
       }
+      @keyframes wash-move {
+        0%, 100% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+      }
       @keyframes drift-a {
         0% { transform: translate(0, 0) scale(1); }
         50% { transform: translate(30px, -40px) scale(1.15); }
@@ -237,37 +243,51 @@ export default function PublicChatPage() {
   return (
     <div
       style={{ background: '#14211B', fontFamily: 'Inter, sans-serif', position: 'relative', overflow: 'hidden' }}
-      className="min-h-screen flex flex-col items-center justify-center p-4 cursor-none-desktop"
+      className={
+        embedded
+          ? 'h-screen w-screen flex flex-col p-0'
+          : 'min-h-screen flex flex-col items-center justify-center p-4 cursor-none-desktop'
+      }
     >
       {fonts}
       {globalStyle}
 
-      {/* Ambient bokeh background */}
+      {/* Ambient animated gradient wash — big and unmissable */}
       <div
         aria-hidden
-        className="absolute rounded-full pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          width: 420, height: 420, top: '-8%', left: '-10%',
-          background: 'radial-gradient(circle, rgba(200,155,60,0.16) 0%, transparent 70%)',
-          filter: 'blur(10px)', animation: 'drift-a 16s ease-in-out infinite',
+          background:
+            'radial-gradient(circle at 20% 20%, rgba(200,155,60,0.35) 0%, transparent 45%), radial-gradient(circle at 80% 75%, rgba(62,102,88,0.55) 0%, transparent 50%), radial-gradient(circle at 60% 15%, rgba(200,155,60,0.2) 0%, transparent 40%)',
+          backgroundSize: '200% 200%',
+          animation: 'wash-move 10s ease-in-out infinite',
         }}
       />
       <div
         aria-hidden
         className="absolute rounded-full pointer-events-none"
         style={{
-          width: 380, height: 380, bottom: '-12%', right: '-8%',
-          background: 'radial-gradient(circle, rgba(62,102,88,0.35) 0%, transparent 70%)',
-          filter: 'blur(10px)', animation: 'drift-b 20s ease-in-out infinite',
+          width: 500, height: 500, top: '-15%', left: '-15%',
+          background: 'radial-gradient(circle, rgba(200,155,60,0.28) 0%, transparent 65%)',
+          filter: 'blur(4px)', animation: 'drift-a 12s ease-in-out infinite',
         }}
       />
       <div
         aria-hidden
         className="absolute rounded-full pointer-events-none"
         style={{
-          width: 200, height: 200, top: '30%', right: '8%',
-          background: 'radial-gradient(circle, rgba(200,155,60,0.10) 0%, transparent 70%)',
-          filter: 'blur(8px)', animation: 'drift-c 12s ease-in-out infinite',
+          width: 460, height: 460, bottom: '-18%', right: '-12%',
+          background: 'radial-gradient(circle, rgba(62,102,88,0.6) 0%, transparent 65%)',
+          filter: 'blur(4px)', animation: 'drift-b 14s ease-in-out infinite',
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          width: 260, height: 260, top: '25%', right: '5%',
+          background: 'radial-gradient(circle, rgba(200,155,60,0.25) 0%, transparent 65%)',
+          filter: 'blur(3px)', animation: 'drift-c 9s ease-in-out infinite',
         }}
       />
 
@@ -309,12 +329,14 @@ export default function PublicChatPage() {
       />
 
       <div
-        className="card-anim w-full max-w-md flex flex-col rounded-2xl overflow-hidden relative"
+        className={`card-anim flex flex-col overflow-hidden relative ${
+          embedded ? 'w-full h-full' : 'w-full max-w-md rounded-2xl'
+        }`}
         style={{
           background: '#1B2A22',
-          border: '1px solid rgba(200,155,60,0.25)',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
-          height: 'min(680px, 92vh)',
+          border: embedded ? 'none' : '1px solid rgba(200,155,60,0.25)',
+          boxShadow: embedded ? 'none' : '0 20px 60px rgba(0,0,0,0.4)',
+          height: embedded ? '100%' : 'min(680px, 92vh)',
         }}
         onMouseEnter={() => setCursorHover(false)}
       >
@@ -461,9 +483,11 @@ export default function PublicChatPage() {
         )}
       </div>
 
-      <p className="text-[11px] mt-4 relative" style={{ color: 'rgba(246,241,228,0.3)' }}>
-        Replies come from {companyName}&apos;s AI receptionist
-      </p>
+      {!embedded && (
+        <p className="text-[11px] mt-4 relative" style={{ color: 'rgba(246,241,228,0.3)' }}>
+          Replies come from {companyName}&apos;s AI receptionist
+        </p>
+      )}
     </div>
   );
 }
