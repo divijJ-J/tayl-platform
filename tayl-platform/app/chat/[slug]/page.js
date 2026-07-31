@@ -82,6 +82,7 @@ export default function PublicChatPage() {
   }, [messages, sending]);
 
   useEffect(() => {
+    if (embedded) return undefined;
     const move = (e) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
       setCursorActive(true);
@@ -96,7 +97,7 @@ export default function PublicChatPage() {
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseleave', leave);
     };
-  }, []);
+  }, [embedded]);
 
   const handleStart = (e) => {
     e.preventDefault();
@@ -288,34 +289,38 @@ export default function PublicChatPage() {
         <rect width="100%" height="100%" filter="url(#grain)" />
       </svg>
 
-      {/* Custom cursor */}
-      <div
-        aria-hidden
-        className="fixed rounded-full pointer-events-none z-50"
-        style={{
-          width: cursorHover ? 34 : 18,
-          height: cursorHover ? 34 : 18,
-          left: cursorPos.x,
-          top: cursorPos.y,
-          transform: 'translate(-50%, -50%)',
-          border: '1.5px solid #8b5cf6',
-          background: cursorHover ? 'rgba(139,92,246,0.15)' : 'transparent',
-          opacity: cursorActive ? 1 : 0,
-          transition: 'width 0.15s ease, height 0.15s ease, background 0.15s ease, opacity 0.2s ease',
-        }}
-      />
-      <div
-        aria-hidden
-        className="fixed rounded-full pointer-events-none z-50"
-        style={{
-          width: 4, height: 4,
-          left: cursorPos.x, top: cursorPos.y,
-          transform: 'translate(-50%, -50%)',
-          background: '#8b5cf6',
-          opacity: cursorActive ? 1 : 0,
-          transition: 'opacity 0.2s ease',
-        }}
-      />
+      {/* Custom cursor — desktop full-page mode only, doesn't make sense in a small embedded iframe */}
+      {!embedded && (
+        <>
+          <div
+            aria-hidden
+            className="fixed rounded-full pointer-events-none z-50"
+            style={{
+              width: cursorHover ? 34 : 18,
+              height: cursorHover ? 34 : 18,
+              left: cursorPos.x,
+              top: cursorPos.y,
+              transform: 'translate(-50%, -50%)',
+              border: '1.5px solid #8b5cf6',
+              background: cursorHover ? 'rgba(139,92,246,0.15)' : 'transparent',
+              opacity: cursorActive ? 1 : 0,
+              transition: 'width 0.15s ease, height 0.15s ease, background 0.15s ease, opacity 0.2s ease',
+            }}
+          />
+          <div
+            aria-hidden
+            className="fixed rounded-full pointer-events-none z-50"
+            style={{
+              width: 4, height: 4,
+              left: cursorPos.x, top: cursorPos.y,
+              transform: 'translate(-50%, -50%)',
+              background: '#8b5cf6',
+              opacity: cursorActive ? 1 : 0,
+              transition: 'opacity 0.2s ease',
+            }}
+          />
+        </>
+      )}
 
       <div
         className={`card-anim flex flex-col overflow-hidden relative ${
