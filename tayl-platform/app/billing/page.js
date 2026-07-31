@@ -31,7 +31,7 @@ export default async function BillingPage() {
     <div className="max-w-2xl">
       <h1 className="text-xl font-semibold mb-2">Billing</h1>
 
-      <div className="border border-slate-200 rounded px-4 py-3 mb-6 text-sm">
+      <div className="border border-white/10 rounded px-4 py-3 mb-6 text-sm">
         {isActive && (
           <p>
             Current plan: <span className="font-medium">{company.plan}</span> — active
@@ -46,7 +46,7 @@ export default async function BillingPage() {
 
       <div className="grid grid-cols-2 gap-4">
         {PLANS.map((p) => (
-          <div key={p.key} className="border border-slate-200 rounded px-4 py-4">
+          <div key={p.key} className="border border-white/10 rounded px-4 py-4">
             <div className="font-medium mb-1">{p.name}</div>
             <div className="text-2xl font-semibold mb-3">
               ₹{p.price}

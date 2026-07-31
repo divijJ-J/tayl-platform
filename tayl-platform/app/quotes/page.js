@@ -31,7 +31,7 @@ export default async function QuotesPage() {
         </Link>
       </div>
 
-      {quotesErr && <p className="text-red-600 text-sm mb-4">Error: {quotesErr.message}</p>}
+      {quotesErr && <p className="text-red-400 text-sm mb-4">Error: {quotesErr.message}</p>}
 
       {!quotesErr && (!quotes || quotes.length === 0) && (
         <p className="opacity-60 text-sm">No quotes yet — create one to get started.</p>
@@ -39,7 +39,7 @@ export default async function QuotesPage() {
 
       <div className="space-y-2">
         {quotes?.map((q) => (
-          <div key={q.id} className="border border-slate-200 rounded px-4 py-3 flex justify-between items-center">
+          <div key={q.id} className="border border-white/10 rounded px-4 py-3 flex justify-between items-center">
             <div>
               <div className="font-medium">{customerMap[q.customer_id]?.name || 'Unknown customer'}</div>
               <div className="text-sm opacity-60">

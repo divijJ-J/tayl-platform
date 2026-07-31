@@ -16,7 +16,7 @@ export default function TiltCard({ children, className = '' }) {
     const rotateY = px * 10; // left/right tilt
     const rotateX = -py * 10; // up/down tilt
     el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`;
-    el.style.boxShadow = `${-px * 18}px ${py * 18 + 10}px 30px rgba(30,41,59,0.10)`;
+    el.style.boxShadow = `${-px * 18}px ${py * 18 + 10}px 30px rgba(139,92,246,0.28)`;
   };
 
   const handleLeave = () => {

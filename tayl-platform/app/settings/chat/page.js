@@ -69,7 +69,7 @@ export default function ChatSettingsPage() {
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             placeholder="your-business-name"
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
           />
         </div>
 
@@ -78,7 +78,7 @@ export default function ChatSettingsPage() {
           <input
             value={greeting}
             onChange={(e) => setGreeting(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
           />
         </div>
 
@@ -88,12 +88,12 @@ export default function ChatSettingsPage() {
             rows={3}
             value={persona}
             onChange={(e) => setPersona(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
           />
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        {saved && <p className="text-sm text-green-600">Saved.</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
+        {saved && <p className="text-sm text-green-400">Saved.</p>}
 
         <button
           type="submit"
@@ -106,7 +106,7 @@ export default function ChatSettingsPage() {
 
       {chatUrl && (
         <>
-          <div className="mt-6 border border-slate-200 rounded px-4 py-3">
+          <div className="mt-6 border border-white/10 rounded px-4 py-3">
             <p className="text-sm opacity-70 mb-1">Your chat link:</p>
             <a href={chatUrl} target="_blank" rel="noreferrer" className="text-sm underline break-all">
               {chatUrl}
@@ -116,11 +116,11 @@ export default function ChatSettingsPage() {
             </p>
           </div>
 
-          <div className="mt-4 border border-slate-200 rounded px-4 py-3">
+          <div className="mt-4 border border-white/10 rounded px-4 py-3">
             <p className="text-sm opacity-70 mb-2">
               Or add it right on your own website — paste this before <code>&lt;/body&gt;</code>:
             </p>
-            <pre className="bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs overflow-x-auto">
+            <pre className="bg-[#12131A]/5 border border-white/10 rounded px-3 py-2 text-xs overflow-x-auto">
 {`<script src="${typeof window !== 'undefined' ? window.location.origin : ''}/widget.js" data-tayl-slug="${slug}" async></script>`}
             </pre>
             <p className="text-xs opacity-40 mt-2">

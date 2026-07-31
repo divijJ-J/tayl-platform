@@ -63,7 +63,7 @@ export default function PaymentSettingsPage() {
             value={keyId}
             onChange={(e) => setKeyId(e.target.value)}
             placeholder="rzp_test_..."
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1 font-mono text-sm"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1 font-mono text-sm"
           />
         </div>
         <div>
@@ -73,7 +73,7 @@ export default function PaymentSettingsPage() {
             type="password"
             value={keySecret}
             onChange={(e) => setKeySecret(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1 font-mono text-sm"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1 font-mono text-sm"
           />
         </div>
         <div>
@@ -82,12 +82,12 @@ export default function PaymentSettingsPage() {
             type="password"
             value={webhookSecret}
             onChange={(e) => setWebhookSecret(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1 font-mono text-sm"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1 font-mono text-sm"
           />
         </div>
 
-        {status && status !== 'saved' && <p className="text-red-600 text-sm">{status}</p>}
-        {status === 'saved' && <p className="text-green-600 text-sm">Saved.</p>}
+        {status && status !== 'saved' && <p className="text-red-400 text-sm">{status}</p>}
+        {status === 'saved' && <p className="text-green-400 text-sm">Saved.</p>}
 
         <button
           type="submit"
@@ -98,7 +98,7 @@ export default function PaymentSettingsPage() {
         </button>
       </form>
 
-      <div className="mt-8 text-sm opacity-60 space-y-2 border-t border-slate-200 pt-4">
+      <div className="mt-8 text-sm opacity-60 space-y-2 border-t border-white/10 pt-4">
         <p className="font-medium opacity-80">Where to find these:</p>
         <p>1. Log into your Razorpay Dashboard</p>
         <p>2. Go to Settings → API Keys → Generate Key (use Test Mode keys first)</p>

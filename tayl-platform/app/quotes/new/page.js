@@ -64,7 +64,7 @@ export default function NewQuotePage() {
             required
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1"
           />
         </div>
 
@@ -73,7 +73,7 @@ export default function NewQuotePage() {
           <input
             value={customerEmail}
             onChange={(e) => setCustomerEmail(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1"
           />
         </div>
 
@@ -86,21 +86,21 @@ export default function NewQuotePage() {
                   placeholder="Description"
                   value={item.description}
                   onChange={(e) => updateItem(idx, 'description', e.target.value)}
-                  className="flex-1 bg-white border border-slate-200 rounded px-3 py-2"
+                  className="flex-1 bg-[#12131A] border border-white/10 rounded px-3 py-2"
                 />
                 <input
                   type="number"
                   placeholder="Qty"
                   value={item.quantity}
                   onChange={(e) => updateItem(idx, 'quantity', e.target.value)}
-                  className="w-20 bg-white border border-slate-200 rounded px-3 py-2"
+                  className="w-20 bg-[#12131A] border border-white/10 rounded px-3 py-2"
                 />
                 <input
                   type="number"
                   placeholder="Unit price"
                   value={item.unit_price}
                   onChange={(e) => updateItem(idx, 'unit_price', e.target.value)}
-                  className="w-28 bg-white border border-slate-200 rounded px-3 py-2"
+                  className="w-28 bg-[#12131A] border border-white/10 rounded px-3 py-2"
                 />
                 <span className="w-24 text-sm opacity-70 text-right">
                   {(item.quantity * item.unit_price).toFixed(2)}
@@ -109,7 +109,7 @@ export default function NewQuotePage() {
                   <button
                     type="button"
                     onClick={() => removeItem(idx)}
-                    className="text-red-600 text-sm px-2"
+                    className="text-red-400 text-sm px-2"
                   >
                     ✕
                   </button>
@@ -133,7 +133,7 @@ export default function NewQuotePage() {
               type="number"
               value={taxRate}
               onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
-              className="w-24 bg-white border border-slate-200 rounded px-3 py-2 mt-1 block"
+              className="w-24 bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1 block"
             />
           </div>
           <div>
@@ -142,7 +142,7 @@ export default function NewQuotePage() {
               type="number"
               value={discount}
               onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
-              className="w-24 bg-white border border-slate-200 rounded px-3 py-2 mt-1 block"
+              className="w-24 bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1 block"
             />
           </div>
         </div>
@@ -152,12 +152,12 @@ export default function NewQuotePage() {
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 mt-1"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 mt-1"
             rows={2}
           />
         </div>
 
-        <div className="border-t border-slate-200 pt-4 text-sm space-y-1">
+        <div className="border-t border-white/10 pt-4 text-sm space-y-1">
           <div className="flex justify-between opacity-70">
             <span>Subtotal</span><span>{subtotal.toFixed(2)}</span>
           </div>
@@ -172,7 +172,7 @@ export default function NewQuotePage() {
           </div>
         </div>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p className="text-red-400 text-sm">{error}</p>}
 
         <button
           type="submit"

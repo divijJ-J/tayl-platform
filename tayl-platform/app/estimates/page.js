@@ -130,7 +130,7 @@ export default function EstimatesPage() {
             <select
               value={selectedCustomerId}
               onChange={(e) => setSelectedCustomerId(e.target.value)}
-              className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
+              className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
             >
               <option value="">None</option>
               {customers.map((c) => (
@@ -149,7 +149,7 @@ export default function EstimatesPage() {
             placeholder="e.g. Customer wants their vintage watch strap replaced and the crystal polished"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm pr-12"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm pr-12"
           />
           {voiceSupported && (
             <button
@@ -157,7 +157,7 @@ export default function EstimatesPage() {
               onClick={toggleListening}
               title={listening ? 'Stop recording' : 'Speak instead of typing'}
               className={`absolute right-2 top-2 rounded-full w-8 h-8 flex items-center justify-center text-sm border ${
-                listening ? 'bg-red-500 border-red-500 animate-pulse' : 'border-slate-300 hover:bg-slate-100'
+                listening ? 'bg-red-500 border-red-500 animate-pulse' : 'border-white/15 hover:bg-[#12131A]/5'
               }`}
             >
               🎤
@@ -175,36 +175,36 @@ export default function EstimatesPage() {
         </button>
       </form>
 
-      {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
       {estimate && (
-        <div className="border border-slate-200 rounded px-4 py-4 space-y-4">
+        <div className="border border-white/10 rounded px-4 py-4 space-y-4">
           <div className="space-y-2">
             {estimate.line_items.map((li, idx) => (
               <div key={idx} className="flex gap-2 items-center text-sm">
                 <input
                   value={li.description}
                   onChange={(e) => updateLineItem(idx, 'description', e.target.value)}
-                  className="flex-1 bg-white border border-slate-200 rounded px-2 py-1"
+                  className="flex-1 bg-[#12131A] border border-white/10 rounded px-2 py-1"
                 />
                 <input
                   type="number"
                   value={li.quantity}
                   onChange={(e) => updateLineItem(idx, 'quantity', e.target.value)}
-                  className="w-16 bg-white border border-slate-200 rounded px-2 py-1"
+                  className="w-16 bg-[#12131A] border border-white/10 rounded px-2 py-1"
                 />
                 <input
                   type="number"
                   value={li.unit_price}
                   onChange={(e) => updateLineItem(idx, 'unit_price', e.target.value)}
-                  className="w-24 bg-white border border-slate-200 rounded px-2 py-1"
+                  className="w-24 bg-[#12131A] border border-white/10 rounded px-2 py-1"
                 />
                 <span className="w-20 text-right opacity-70">{(li.quantity * li.unit_price).toFixed(2)}</span>
               </div>
             ))}
           </div>
 
-          <div className="text-right font-semibold text-sm border-t border-slate-200 pt-2">
+          <div className="text-right font-semibold text-sm border-t border-white/10 pt-2">
             Total: ₹{total.toFixed(2)}
           </div>
 
@@ -212,23 +212,23 @@ export default function EstimatesPage() {
             <p className="text-xs opacity-60">Note: {estimate.notes}</p>
           )}
           {estimate.flagged_concerns && (
-            <p className="text-xs text-amber-600">⚠ {estimate.flagged_concerns}</p>
+            <p className="text-xs text-amber-400">⚠ {estimate.flagged_concerns}</p>
           )}
 
-          <div className="border-t border-slate-200 pt-4 space-y-2">
+          <div className="border-t border-white/10 pt-4 space-y-2">
             <p className="text-sm opacity-70">Review the numbers above, then create a quote for this customer:</p>
             <input
               required
               placeholder="Customer name"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
-              className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
+              className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
             />
             <input
               placeholder="Customer email (optional)"
               value={customerEmail}
               onChange={(e) => setCustomerEmail(e.target.value)}
-              className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-sm"
+              className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
             />
             <button
               onClick={handleCreateQuote}

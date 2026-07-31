@@ -43,7 +43,7 @@ export default async function TasksPage() {
     <div>
       <h1 className="text-xl font-semibold mb-4">Tasks</h1>
 
-      {error && <p className="text-red-600 text-sm mb-4">Error: {error.message}</p>}
+      {error && <p className="text-red-400 text-sm mb-4">Error: {error.message}</p>}
 
       <div className="grid grid-cols-4 gap-4">
         {COLUMNS.map((col) => {

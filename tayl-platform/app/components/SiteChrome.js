@@ -23,21 +23,20 @@ export default function SiteChrome({ user, children }) {
   const isPublicChat = pathname?.startsWith('/chat/');
 
   if (isPublicChat) {
-    // Public-facing widget keeps its own separate theme — no app chrome here.
     return <>{children}</>;
   }
 
   return (
     <div className="min-h-screen">
       <CursorGlow />
-      <nav className="surface-card sticky top-0 z-40 mx-3 mt-3 md:mx-6 md:mt-4 rounded-2xl px-4 md:px-5 py-3 flex items-center gap-1 md:gap-2 overflow-x-auto">
-        <a href="/" className="flex items-center gap-1.5 pr-3 mr-1 shrink-0">
+      <nav className="border-b border-white/10 px-4 md:px-6 py-4 flex items-center gap-1 md:gap-2 overflow-x-auto">
+        <a href="/" className="flex items-center gap-2 pr-4 mr-1 shrink-0">
           <span
             aria-hidden
             className="w-2 h-2 rounded-full shrink-0"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #3b82f6)' }}
+            style={{ background: 'linear-gradient(135deg, #8b5cf6, #a78bfa)' }}
           />
-          <span className="grad-text font-display font-semibold text-[15px]">TAYL</span>
+          <span className="font-display font-semibold text-[15px] tracking-wide">TAYL</span>
         </a>
 
         {user ? (
@@ -49,9 +48,7 @@ export default function SiteChrome({ user, children }) {
                   key={link.href}
                   href={link.href}
                   className={`shrink-0 text-[13px] px-3 py-1.5 rounded-full transition-colors whitespace-nowrap ${
-                    active
-                      ? 'bg-slate-900 text-white'
-                      : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                    active ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   {link.label}
@@ -65,12 +62,21 @@ export default function SiteChrome({ user, children }) {
           </>
         ) : (
           <>
+            <a href="#features" className="shrink-0 text-[13px] px-3 py-1.5 rounded-full text-white/50 hover:text-white hover:bg-white/5">
+              Features
+            </a>
+            <a href="#workflow" className="shrink-0 text-[13px] px-3 py-1.5 rounded-full text-white/50 hover:text-white hover:bg-white/5">
+              Workflow
+            </a>
+            <a href="#pricing" className="shrink-0 text-[13px] px-3 py-1.5 rounded-full text-white/50 hover:text-white hover:bg-white/5">
+              Pricing
+            </a>
             <span className="flex-1 min-w-2" />
-            <a href="/login" className="shrink-0 text-[13px] px-3 py-1.5 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100">
+            <a href="/login" className="shrink-0 text-[13px] px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors">
               Log in
             </a>
-            <a href="/signup" className="btn-primary shrink-0 text-[13px] px-4 py-1.5 rounded-full font-medium">
-              Sign up
+            <a href="/signup" className="btn-primary shrink-0 text-[13px] px-4 py-2 rounded-full">
+              Sign up →
             </a>
           </>
         )}

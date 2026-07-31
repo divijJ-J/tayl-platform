@@ -26,7 +26,7 @@ export default function AcceptButton({ quoteId }) {
     <button
       onClick={handleAccept}
       disabled={loading}
-      className="text-sm bg-green-600/20 text-green-600 border border-green-600/40 rounded px-3 py-1.5 disabled:opacity-50"
+      className="text-sm bg-green-600/20 text-green-400 border border-green-600/40 rounded px-3 py-1.5 disabled:opacity-50"
     >
       {loading ? 'Accepting...' : 'Accept'}
     </button>

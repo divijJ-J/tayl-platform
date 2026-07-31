@@ -48,7 +48,7 @@ export default function WhatsAppSettingsPage() {
     return (
       <div className="max-w-lg">
         <h1 className="font-display text-xl font-semibold mb-2">WhatsApp</h1>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-white/50">
           Set up your public link name in{' '}
           <a href="/settings/chat" className="underline">Chat Widget settings</a> first — WhatsApp reuses
           the same link so we know which business a message belongs to.
@@ -63,14 +63,14 @@ export default function WhatsAppSettingsPage() {
   return (
     <div className="max-w-lg">
       <h1 className="font-display text-xl font-semibold mb-2">WhatsApp</h1>
-      <p className="text-sm text-slate-500 mb-6">
+      <p className="text-sm text-white/50 mb-6">
         Connect your own WhatsApp Business number via Meta&apos;s official Cloud API. Replies use the
         same Knowledge Base and Customer Memory as your website chat.
       </p>
 
       <div className="surface-card rounded-2xl px-5 py-4 mb-6 text-sm">
         <p className="font-medium mb-2">Setup steps</p>
-        <ol className="list-decimal list-inside space-y-1.5 text-slate-600">
+        <ol className="list-decimal list-inside space-y-1.5 text-white/60">
           <li>
             Create a free app at{' '}
             <a href="https://developers.facebook.com/apps" target="_blank" rel="noreferrer" className="underline">
@@ -82,7 +82,7 @@ export default function WhatsAppSettingsPage() {
           <li>Pick any random string as your <strong>Verify Token</strong> — you choose this, it just has to match below</li>
           <li>
             In Meta&apos;s WhatsApp → Configuration page, set the webhook URL to:
-            <div className="bg-slate-50 border border-slate-200 rounded px-3 py-2 mt-1 font-mono text-xs break-all">
+            <div className="bg-[#12131A]/5 border border-white/10 rounded px-3 py-2 mt-1 font-mono text-xs break-all">
               {webhookUrl}
             </div>
           </li>
@@ -92,35 +92,35 @@ export default function WhatsAppSettingsPage() {
 
       <form onSubmit={handleSave} className="space-y-3">
         <div>
-          <label className="text-xs text-slate-500 block mb-1">Phone Number ID</label>
+          <label className="text-xs text-white/50 block mb-1">Phone Number ID</label>
           <input
             value={phoneNumberId}
             onChange={(e) => setPhoneNumberId(e.target.value)}
-            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="text-xs text-slate-500 block mb-1">
+          <label className="text-xs text-white/50 block mb-1">
             Access Token {data.connected && <span className="opacity-50">(leave blank to keep current)</span>}
           </label>
           <input
             type="password"
             value={accessToken}
             onChange={(e) => setAccessToken(e.target.value)}
-            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="text-xs text-slate-500 block mb-1">Verify Token</label>
+          <label className="text-xs text-white/50 block mb-1">Verify Token</label>
           <input
             value={verifyToken}
             onChange={(e) => setVerifyToken(e.target.value)}
-            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
           />
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        {saved && <p className="text-sm text-green-600">Saved.</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
+        {saved && <p className="text-sm text-green-400">Saved.</p>}
 
         <button type="submit" disabled={saving} className="btn-primary rounded-full px-5 py-2.5 text-sm font-medium disabled:opacity-50">
           {saving ? 'Saving...' : 'Save'}
@@ -128,7 +128,7 @@ export default function WhatsAppSettingsPage() {
       </form>
 
       {data.connected && (
-        <p className="text-xs text-slate-400 mt-4">✓ WhatsApp is connected for this business.</p>
+        <p className="text-xs text-white/40 mt-4">✓ WhatsApp is connected for this business.</p>
       )}
     </div>
   );
