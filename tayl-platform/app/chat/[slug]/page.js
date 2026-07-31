@@ -2,51 +2,43 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 
-function BellIcon({ className, ringing, idle, style }) {
+function SparkIcon({ className, ringing, idle, style }) {
   return (
     <svg
       viewBox="0 0 48 48"
       className={className}
       style={{
         ...style,
-        transformOrigin: '24px 10px',
+        transformOrigin: '24px 24px',
         animation: ringing
-          ? 'bell-ring 0.6s ease-in-out'
+          ? 'spark-pulse 0.6s ease-in-out'
           : idle
-          ? 'bell-idle 4.5s ease-in-out infinite'
+          ? 'spark-idle 3.5s ease-in-out infinite'
           : 'none',
       }}
     >
       <path
-        d="M24 6c-1.4 0-2.5 1.1-2.5 2.5v1.6C15.9 11.4 12 15.9 12 21.3v7.4l-3.2 4.8c-.6.9 0 2.1 1.1 2.1h28.2c1.1 0 1.7-1.2 1.1-2.1L36 28.7v-7.4c0-5.4-3.9-9.9-9.5-11.2V8.5C26.5 7.1 25.4 6 24 6z"
+        d="M24 4c1 7 3 11 6 14 3 3 7 5 14 6-7 1-11 3-14 6-3 3-5 7-6 14-1-7-3-11-6-14-3-3-7-5-14-6 7-1 11-3 14-6 3-3 5-7 6-14z"
         fill="currentColor"
       />
-      <path
-        d="M19 37.5a5 5 0 0 0 10 0"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-      />
-      <circle cx="24" cy="21" r="2.6" fill="#14211B" opacity="0.35" />
     </svg>
   );
 }
 
-function DeskIllustration() {
-  // Faint decorative line-art: a little reception desk + bell, sits behind the guestbook form
+function DecorativeMotif() {
+  // Faint decorative line-art: abstract chat bubble + sparks, sits behind the guestbook form
   return (
     <svg
       viewBox="0 0 200 120"
       className="absolute right-2 top-2 w-28 h-auto pointer-events-none"
       style={{ opacity: 0.08 }}
     >
-      <rect x="20" y="70" width="160" height="8" rx="2" fill="#C89B3C" />
-      <rect x="30" y="78" width="10" height="30" fill="#C89B3C" />
-      <rect x="160" y="78" width="10" height="30" fill="#C89B3C" />
-      <circle cx="100" cy="45" r="16" fill="none" stroke="#C89B3C" strokeWidth="2.5" />
-      <path d="M92 60a8 8 0 0 0 16 0" fill="none" stroke="#C89B3C" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 68 Q100 50 140 68" fill="none" stroke="#C89B3C" strokeWidth="2" strokeDasharray="3 4" />
+      <rect x="40" y="20" width="110" height="60" rx="16" fill="none" stroke="#8b5cf6" strokeWidth="2.5" />
+      <path d="M60 80 L52 96 L78 80" fill="none" stroke="#8b5cf6" strokeWidth="2.5" strokeLinejoin="round" />
+      <circle cx="70" cy="50" r="4" fill="#8b5cf6" />
+      <circle cx="95" cy="50" r="4" fill="#8b5cf6" />
+      <circle cx="120" cy="50" r="4" fill="#8b5cf6" />
+      <path d="M172 12c.6 4 1.8 6.4 3.6 8.2 1.8 1.8 4.2 3 8.2 3.6-4 .6-6.4 1.8-8.2 3.6-1.8 1.8-3 4.2-3.6 8.2-.6-4-1.8-6.4-3.6-8.2-1.8-1.8-4.2-3-8.2-3.6 4-.6 6.4-1.8 8.2-3.6 1.8-1.8 3-4.2 3.6-8.2z" fill="#8b5cf6" />
     </svg>
   );
 }
@@ -160,18 +152,15 @@ export default function PublicChatPage() {
 
   const globalStyle = (
     <style>{`
-      @keyframes bell-ring {
-        0% { transform: rotate(0deg); }
-        15% { transform: rotate(-14deg); }
-        30% { transform: rotate(11deg); }
-        45% { transform: rotate(-8deg); }
-        60% { transform: rotate(5deg); }
-        75% { transform: rotate(-2deg); }
-        100% { transform: rotate(0deg); }
+      @keyframes spark-pulse {
+        0% { transform: scale(1) rotate(0deg); }
+        30% { transform: scale(1.35) rotate(20deg); }
+        60% { transform: scale(0.95) rotate(-8deg); }
+        100% { transform: scale(1) rotate(0deg); }
       }
-      @keyframes bell-idle {
-        0%, 100% { transform: rotate(0deg); }
-        50% { transform: rotate(3deg); }
+      @keyframes spark-idle {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.12); opacity: 0.75; }
       }
       @keyframes typing-dot {
         0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
@@ -208,23 +197,23 @@ export default function PublicChatPage() {
       .card-anim { animation: card-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
       .typing-dot { animation: typing-dot 1.1s ease-in-out infinite; }
       .chat-scroll::-webkit-scrollbar { width: 6px; }
-      .chat-scroll::-webkit-scrollbar-thumb { background: rgba(246,241,228,0.15); border-radius: 3px; }
-      .bell-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(200,155,60,0.4); }
-      .bell-input:focus { border-bottom-color: #C89B3C !important; }
-      .send-btn:hover:not(:disabled) { box-shadow: 0 0 0 6px rgba(200,155,60,0.18); }
+      .chat-scroll::-webkit-scrollbar-thumb { background: rgba(245,245,247,0.15); border-radius: 3px; }
+      .spark-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(139,92,246,0.4); }
+      .spark-input:focus { border-bottom-color: #8b5cf6 !important; }
+      .send-btn:hover:not(:disabled) { box-shadow: 0 0 0 6px rgba(139,92,246,0.18); }
       @media (pointer: fine) {
         .cursor-none-desktop { cursor: none; }
         .cursor-none-desktop * { cursor: none !important; }
       }
       @media (prefers-reduced-motion: reduce) {
-        .msg-anim, .card-anim, .typing-dot, [style*="drift"], [style*="bell-idle"] { animation: none !important; }
+        .msg-anim, .card-anim, .typing-dot, [style*="drift"], [style*="spark-idle"] { animation: none !important; }
       }
     `}</style>
   );
 
   if (notFound) {
     return (
-      <div style={{ background: '#14211B' }} className="min-h-screen flex items-center justify-center text-[#F6F1E4]">
+      <div style={{ background: '#08090D' }} className="min-h-screen flex items-center justify-center text-[#f5f5f7]">
         {fonts}
         <p className="opacity-60 text-sm">This chat link doesn&apos;t exist.</p>
       </div>
@@ -233,7 +222,7 @@ export default function PublicChatPage() {
 
   if (!companyName) {
     return (
-      <div style={{ background: '#14211B' }} className="min-h-screen flex items-center justify-center text-[#F6F1E4]">
+      <div style={{ background: '#08090D' }} className="min-h-screen flex items-center justify-center text-[#f5f5f7]">
         {fonts}
         <p className="opacity-40 text-sm">Loading...</p>
       </div>
@@ -242,7 +231,7 @@ export default function PublicChatPage() {
 
   return (
     <div
-      style={{ background: '#14211B', fontFamily: 'Inter, sans-serif', position: 'relative', overflow: 'hidden' }}
+      style={{ background: '#08090D', fontFamily: 'Inter, sans-serif', position: 'relative', overflow: 'hidden' }}
       className={
         embedded
           ? 'h-screen w-screen flex flex-col p-0'
@@ -258,7 +247,7 @@ export default function PublicChatPage() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle at 20% 20%, rgba(200,155,60,0.35) 0%, transparent 45%), radial-gradient(circle at 80% 75%, rgba(62,102,88,0.55) 0%, transparent 50%), radial-gradient(circle at 60% 15%, rgba(200,155,60,0.2) 0%, transparent 40%)',
+            'radial-gradient(circle at 20% 20%, rgba(139,92,246,0.35) 0%, transparent 45%), radial-gradient(circle at 80% 75%, rgba(167,139,250,0.55) 0%, transparent 50%), radial-gradient(circle at 60% 15%, rgba(139,92,246,0.2) 0%, transparent 40%)',
           backgroundSize: '200% 200%',
           animation: 'wash-move 10s ease-in-out infinite',
         }}
@@ -268,7 +257,7 @@ export default function PublicChatPage() {
         className="absolute rounded-full pointer-events-none"
         style={{
           width: 500, height: 500, top: '-15%', left: '-15%',
-          background: 'radial-gradient(circle, rgba(200,155,60,0.28) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.28) 0%, transparent 65%)',
           filter: 'blur(4px)', animation: 'drift-a 12s ease-in-out infinite',
         }}
       />
@@ -277,7 +266,7 @@ export default function PublicChatPage() {
         className="absolute rounded-full pointer-events-none"
         style={{
           width: 460, height: 460, bottom: '-18%', right: '-12%',
-          background: 'radial-gradient(circle, rgba(62,102,88,0.6) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(167,139,250,0.6) 0%, transparent 65%)',
           filter: 'blur(4px)', animation: 'drift-b 14s ease-in-out infinite',
         }}
       />
@@ -286,7 +275,7 @@ export default function PublicChatPage() {
         className="absolute rounded-full pointer-events-none"
         style={{
           width: 260, height: 260, top: '25%', right: '5%',
-          background: 'radial-gradient(circle, rgba(200,155,60,0.25) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 65%)',
           filter: 'blur(3px)', animation: 'drift-c 9s ease-in-out infinite',
         }}
       />
@@ -309,8 +298,8 @@ export default function PublicChatPage() {
           left: cursorPos.x,
           top: cursorPos.y,
           transform: 'translate(-50%, -50%)',
-          border: '1.5px solid #C89B3C',
-          background: cursorHover ? 'rgba(200,155,60,0.15)' : 'transparent',
+          border: '1.5px solid #8b5cf6',
+          background: cursorHover ? 'rgba(139,92,246,0.15)' : 'transparent',
           opacity: cursorActive ? 1 : 0,
           transition: 'width 0.15s ease, height 0.15s ease, background 0.15s ease, opacity 0.2s ease',
         }}
@@ -322,7 +311,7 @@ export default function PublicChatPage() {
           width: 4, height: 4,
           left: cursorPos.x, top: cursorPos.y,
           transform: 'translate(-50%, -50%)',
-          background: '#C89B3C',
+          background: '#8b5cf6',
           opacity: cursorActive ? 1 : 0,
           transition: 'opacity 0.2s ease',
         }}
@@ -333,8 +322,8 @@ export default function PublicChatPage() {
           embedded ? 'w-full h-full' : 'w-full max-w-md rounded-2xl'
         }`}
         style={{
-          background: '#1B2A22',
-          border: embedded ? 'none' : '1px solid rgba(200,155,60,0.25)',
+          background: '#12131A',
+          border: embedded ? 'none' : '1px solid rgba(139,92,246,0.25)',
           boxShadow: embedded ? 'none' : '0 20px 60px rgba(0,0,0,0.4)',
           height: embedded ? '100%' : 'min(680px, 92vh)',
         }}
@@ -343,26 +332,26 @@ export default function PublicChatPage() {
         {/* Header */}
         <div
           className="px-5 py-4 flex items-center gap-3 relative"
-          style={{ borderBottom: '1px solid rgba(200,155,60,0.2)' }}
+          style={{ borderBottom: '1px solid rgba(139,92,246,0.2)' }}
         >
-          <BellIcon ringing={ringing} idle={!ringing} className="w-6 h-6 shrink-0" style={{ color: '#C89B3C' }} />
+          <SparkIcon ringing={ringing} idle={!ringing} className="w-6 h-6 shrink-0" style={{ color: '#8b5cf6' }} />
           <div className="min-w-0">
             <p
               className="truncate text-[15px] leading-tight"
-              style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, color: '#F6F1E4' }}
+              style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, color: '#f5f5f7' }}
             >
               {companyName}
             </p>
-            <p className="text-[10.5px] tracking-[0.14em] uppercase mt-0.5" style={{ color: '#C89B3C' }}>
+            <p className="text-[10.5px] tracking-[0.14em] uppercase mt-0.5" style={{ color: '#8b5cf6' }}>
               AI Receptionist
             </p>
           </div>
           <div className="ml-auto flex items-center gap-1.5 shrink-0">
             <span
               className="w-1.5 h-1.5 rounded-full"
-              style={{ background: '#7FBF9E', boxShadow: '0 0 0 3px rgba(127,191,158,0.2)' }}
+              style={{ background: '#7FBF9E', boxShadow: '0 0 0 3px rgba(52,211,153,0.2)' }}
             />
-            <span className="text-[11px]" style={{ color: 'rgba(246,241,228,0.5)' }}>
+            <span className="text-[11px]" style={{ color: 'rgba(245,245,247,0.5)' }}>
               Online now
             </span>
           </div>
@@ -373,18 +362,18 @@ export default function PublicChatPage() {
             onSubmit={handleStart}
             className="flex-1 flex flex-col justify-center px-7 py-8 relative"
           >
-            <DeskIllustration />
+            <DecorativeMotif />
             <p
               className="text-[19px] leading-snug mb-1 relative"
-              style={{ fontFamily: "'Fraunces', serif", fontStyle: 'italic', fontWeight: 500, color: '#F6F1E4' }}
+              style={{ fontFamily: "'Fraunces', serif", fontStyle: 'italic', fontWeight: 500, color: '#f5f5f7' }}
             >
               Welcome — glad you stopped by.
             </p>
-            <p className="text-[13px] mb-7 relative" style={{ color: 'rgba(246,241,228,0.55)' }}>
+            <p className="text-[13px] mb-7 relative" style={{ color: 'rgba(245,245,247,0.55)' }}>
               A quick line for the guestbook, then we&apos;ll get you sorted.
             </p>
 
-            <label className="text-[11px] tracking-wide uppercase mb-1" style={{ color: 'rgba(246,241,228,0.4)' }}>
+            <label className="text-[11px] tracking-wide uppercase mb-1" style={{ color: 'rgba(245,245,247,0.4)' }}>
               Name
             </label>
             <input
@@ -393,11 +382,11 @@ export default function PublicChatPage() {
               placeholder="Jordan Lee"
               value={visitorName}
               onChange={(e) => setVisitorName(e.target.value)}
-              className="bell-input bg-transparent text-[14px] pb-2 mb-5 outline-none placeholder:opacity-30 transition-colors"
-              style={{ color: '#F6F1E4', borderBottom: '1px solid rgba(246,241,228,0.25)' }}
+              className="spark-input bg-transparent text-[14px] pb-2 mb-5 outline-none placeholder:opacity-30 transition-colors"
+              style={{ color: '#f5f5f7', borderBottom: '1px solid rgba(245,245,247,0.25)' }}
             />
 
-            <label className="text-[11px] tracking-wide uppercase mb-1" style={{ color: 'rgba(246,241,228,0.4)' }}>
+            <label className="text-[11px] tracking-wide uppercase mb-1" style={{ color: 'rgba(245,245,247,0.4)' }}>
               Email <span style={{ opacity: 0.6 }}>(optional)</span>
             </label>
             <input
@@ -406,18 +395,18 @@ export default function PublicChatPage() {
               placeholder="jordan@email.com"
               value={visitorEmail}
               onChange={(e) => setVisitorEmail(e.target.value)}
-              className="bell-input bg-transparent text-[14px] pb-2 mb-8 outline-none placeholder:opacity-30 transition-colors"
-              style={{ color: '#F6F1E4', borderBottom: '1px solid rgba(246,241,228,0.25)' }}
+              className="spark-input bg-transparent text-[14px] pb-2 mb-8 outline-none placeholder:opacity-30 transition-colors"
+              style={{ color: '#f5f5f7', borderBottom: '1px solid rgba(245,245,247,0.25)' }}
             />
 
             <button
               onMouseEnter={() => setCursorHover(true)}
               onMouseLeave={() => setCursorHover(false)}
               type="submit"
-              className="bell-btn rounded-full py-3 text-[14px] font-medium transition-all active:scale-[0.98]"
-              style={{ background: '#C89B3C', color: '#1B2A22' }}
+              className="spark-btn rounded-full py-3 text-[14px] font-medium transition-all active:scale-[0.98]"
+              style={{ background: '#8b5cf6', color: '#12131A' }}
             >
-              Ring the bell →
+              Start chatting →
             </button>
           </form>
         ) : (
@@ -428,7 +417,7 @@ export default function PublicChatPage() {
                   <div key={i} className="flex justify-end msg-anim">
                     <div
                       className="text-[13.5px] leading-relaxed px-3.5 py-2.5 rounded-2xl rounded-br-sm max-w-[82%]"
-                      style={{ background: '#3E6658', color: '#F6F1E4' }}
+                      style={{ background: '#6D5AE6', color: '#f5f5f7' }}
                     >
                       {m.content}
                     </div>
@@ -437,7 +426,7 @@ export default function PublicChatPage() {
                   <div key={i} className="flex items-start gap-2 max-w-[85%] msg-anim">
                     <div
                       className="text-[13.5px] leading-relaxed px-3.5 py-2.5 rounded-2xl rounded-bl-sm"
-                      style={{ background: '#F6F1E4', color: '#1F2A22', borderLeft: '3px solid #C89B3C' }}
+                      style={{ background: '#f5f5f7', color: '#1F2A22', borderLeft: '3px solid #8b5cf6' }}
                     >
                       {m.content}
                     </div>
@@ -446,15 +435,15 @@ export default function PublicChatPage() {
               )}
               {sending && (
                 <div className="flex items-center gap-1 px-3.5 py-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full typing-dot" style={{ background: '#C89B3C', animationDelay: '0ms' }} />
-                  <span className="w-1.5 h-1.5 rounded-full typing-dot" style={{ background: '#C89B3C', animationDelay: '150ms' }} />
-                  <span className="w-1.5 h-1.5 rounded-full typing-dot" style={{ background: '#C89B3C', animationDelay: '300ms' }} />
+                  <span className="w-1.5 h-1.5 rounded-full typing-dot" style={{ background: '#8b5cf6', animationDelay: '0ms' }} />
+                  <span className="w-1.5 h-1.5 rounded-full typing-dot" style={{ background: '#8b5cf6', animationDelay: '150ms' }} />
+                  <span className="w-1.5 h-1.5 rounded-full typing-dot" style={{ background: '#8b5cf6', animationDelay: '300ms' }} />
                 </div>
               )}
               <div ref={bottomRef} />
             </div>
 
-            <form onSubmit={handleSend} className="p-3 flex gap-2 items-center" style={{ borderTop: '1px solid rgba(200,155,60,0.2)' }}>
+            <form onSubmit={handleSend} className="p-3 flex gap-2 items-center" style={{ borderTop: '1px solid rgba(139,92,246,0.2)' }}>
               <input
                 ref={inputRef}
                 onMouseEnter={() => setCursorHover(true)}
@@ -463,7 +452,7 @@ export default function PublicChatPage() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..."
                 className="flex-1 rounded-full px-4 py-2.5 text-[13.5px] outline-none placeholder:opacity-30"
-                style={{ background: 'rgba(246,241,228,0.08)', color: '#F6F1E4' }}
+                style={{ background: 'rgba(245,245,247,0.08)', color: '#f5f5f7' }}
               />
               <button
                 onMouseEnter={() => setCursorHover(true)}
@@ -471,10 +460,10 @@ export default function PublicChatPage() {
                 type="submit"
                 disabled={sending || !input.trim()}
                 className="send-btn w-10 h-10 rounded-full flex items-center justify-center shrink-0 disabled:opacity-30 transition-all active:scale-[0.94]"
-                style={{ background: '#C89B3C' }}
+                style={{ background: '#8b5cf6' }}
                 aria-label="Send"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4" style={{ color: '#1B2A22' }}>
+                <svg viewBox="0 0 24 24" className="w-4 h-4" style={{ color: '#12131A' }}>
                   <path d="M3 11.5L20 4l-6.5 17-3-7.5-7.5-2z" fill="currentColor" />
                 </svg>
               </button>
@@ -484,7 +473,7 @@ export default function PublicChatPage() {
       </div>
 
       {!embedded && (
-        <p className="text-[11px] mt-4 relative" style={{ color: 'rgba(246,241,228,0.3)' }}>
+        <p className="text-[11px] mt-4 relative" style={{ color: 'rgba(245,245,247,0.3)' }}>
           Replies come from {companyName}&apos;s AI receptionist
         </p>
       )}

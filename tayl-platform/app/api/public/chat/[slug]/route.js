@@ -1,5 +1,5 @@
 import { supabaseAdmin } from '../../../../../lib/supabase';
-import { findOrCreateCustomer, generateAIReply, logToCustomerHistory } from '../../../../../lib/ai-conversation';
+import { findOrCreateCustomer, generateAIReply, logToCustomerHistory, notifyOwnerOfNewChat } from '../../../../../lib/ai-conversation';
 import { NextResponse } from 'next/server';
 
 export async function POST(request, { params }) {
@@ -56,6 +56,14 @@ export async function POST(request, { params }) {
 
     if (convoErr) return NextResponse.json({ error: convoErr.message }, { status: 500 });
     conversation = newConvo;
+
+    // Best-effort — the helper catches its own errors, so this never blocks the reply.
+    await notifyOwnerOfNewChat(
+      company.id,
+      company.name,
+      visitor_name || visitor_email || 'a website visitor',
+      message.trim()
+    );
   }
 
   await supabaseAdmin.from('chat_messages').insert({

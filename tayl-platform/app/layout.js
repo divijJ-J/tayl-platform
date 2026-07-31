@@ -1,5 +1,6 @@
 import './globals.css';
 import { getCurrentCompanyId } from '../lib/supabase-server';
+import { supabaseAdmin } from '../lib/supabase';
 import SiteChrome from './components/SiteChrome';
 
 export const metadata = {
@@ -8,7 +9,17 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { user } = await getCurrentCompanyId();
+  const { user, companyId } = await getCurrentCompanyId();
+
+  let publicSlug = null;
+  if (companyId) {
+    const { data: company } = await supabaseAdmin
+      .from('companies')
+      .select('public_slug')
+      .eq('id', companyId)
+      .maybeSingle();
+    publicSlug = company?.public_slug || null;
+  }
 
   return (
     <html lang="en">
@@ -17,7 +28,7 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <SiteChrome user={user}>{children}</SiteChrome>
+        <SiteChrome user={user} publicSlug={publicSlug}>{children}</SiteChrome>
       </body>
     </html>
   );

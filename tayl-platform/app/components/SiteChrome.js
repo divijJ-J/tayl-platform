@@ -2,6 +2,7 @@
 import { usePathname } from 'next/navigation';
 import SignOutButton from './SignOutButton';
 import CursorGlow from './CursorGlow';
+import ChatBubble from './ChatBubble';
 
 const LINKS = [
   { href: '/customers', label: 'Customers' },
@@ -18,7 +19,7 @@ const LINKS = [
   { href: '/settings/payments', label: 'Payment Settings' },
 ];
 
-export default function SiteChrome({ user, children }) {
+export default function SiteChrome({ user, publicSlug, children }) {
   const pathname = usePathname();
   const isPublicChat = pathname?.startsWith('/chat/');
 
@@ -82,6 +83,7 @@ export default function SiteChrome({ user, children }) {
         )}
       </nav>
       <main className="p-3 md:p-6 max-w-6xl mx-auto">{children}</main>
+      {user && publicSlug && <ChatBubble slug={publicSlug} />}
     </div>
   );
 }

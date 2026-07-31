@@ -1,5 +1,26 @@
 import { supabaseAdmin } from './supabase';
 import { callGemini } from './gemini';
+import { sendWhatsAppMessage } from './whatsapp';
+
+// Notifies the business owner on WhatsApp when a NEW website chat conversation
+// starts (not every message — just new leads, so this doesn't spam them).
+// Best-effort: any failure here should never block the actual chat reply.
+export async function notifyOwnerOfNewChat(companyId, companyName, visitorLabel, firstMessage) {
+  try {
+    const { data: connection } = await supabaseAdmin
+      .from('whatsapp_connections')
+      .select('phone_number_id, access_token, notify_phone')
+      .eq('company_id', companyId)
+      .maybeSingle();
+
+    if (!connection || !connection.notify_phone) return;
+
+    const text = `New website chat lead for ${companyName}\nFrom: ${visitorLabel}\n"${firstMessage}"`;
+    await sendWhatsAppMessage(connection.phone_number_id, connection.access_token, connection.notify_phone, text);
+  } catch (err) {
+    console.error('Owner notification failed:', err.message);
+  }
+}
 
 // Finds/creates a customer record for a visitor identified by email or phone,
 // so every channel (website chat, WhatsApp) feeds the same Customer Memory.

@@ -6,6 +6,7 @@ export default function WhatsAppSettingsPage() {
   const [phoneNumberId, setPhoneNumberId] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [verifyToken, setVerifyToken] = useState('');
+  const [notifyPhone, setNotifyPhone] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
@@ -17,6 +18,7 @@ export default function WhatsAppSettingsPage() {
         setData(d);
         setPhoneNumberId(d.phone_number_id || '');
         setVerifyToken(d.verify_token || '');
+        setNotifyPhone(d.notify_phone || '');
       });
   }, []);
 
@@ -29,7 +31,7 @@ export default function WhatsAppSettingsPage() {
       const res = await fetch('/api/settings/whatsapp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number_id: phoneNumberId, access_token: accessToken, verify_token: verifyToken }),
+        body: JSON.stringify({ phone_number_id: phoneNumberId, access_token: accessToken, verify_token: verifyToken, notify_phone: notifyPhone }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
@@ -117,6 +119,22 @@ export default function WhatsAppSettingsPage() {
             onChange={(e) => setVerifyToken(e.target.value)}
             className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
           />
+        </div>
+
+        <div className="pt-2 border-t border-white/5">
+          <label className="text-xs text-white/50 block mb-1">
+            Notify me on WhatsApp for new website chats <span className="opacity-50">(optional)</span>
+          </label>
+          <input
+            value={notifyPhone}
+            onChange={(e) => setNotifyPhone(e.target.value)}
+            placeholder="e.g. 919876543210"
+            className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
+          />
+          <p className="text-xs text-white/30 mt-1">
+            Your own number, with country code, no + or spaces. You&apos;ll get a WhatsApp message the moment
+            a new visitor starts a chat on your website — not for every message, just new leads.
+          </p>
         </div>
 
         {error && <p className="text-sm text-red-400">{error}</p>}
