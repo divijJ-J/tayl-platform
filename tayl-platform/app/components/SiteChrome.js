@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation';
 import SignOutButton from './SignOutButton';
 import CursorGlow from './CursorGlow';
 import ChatBubble from './ChatBubble';
+import Fireflies from './Fireflies';
 
 const LINKS = [
   { href: '/customers', label: 'Customers' },
@@ -28,9 +29,11 @@ export default function SiteChrome({ user, publicSlug, children }) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <Fireflies />
       <CursorGlow />
-      <nav className="border-b border-white/10 px-4 md:px-6 py-4 flex items-center gap-1 md:gap-2 overflow-x-auto">
+      <div className="relative z-10">
+        <nav className="border-b border-white/10 px-4 md:px-6 py-4 flex items-center gap-1 md:gap-2 overflow-x-auto">
         <a href="/" className="flex items-center gap-2 pr-4 mr-1 shrink-0">
           <span
             aria-hidden
@@ -82,8 +85,9 @@ export default function SiteChrome({ user, publicSlug, children }) {
           </>
         )}
       </nav>
-      <main className="p-3 md:p-6 max-w-6xl mx-auto">{children}</main>
-      {user && publicSlug && <ChatBubble slug={publicSlug} />}
+        <main className="p-3 md:p-6 max-w-6xl mx-auto">{children}</main>
+        {user && publicSlug && <ChatBubble slug={publicSlug} />}
+      </div>
     </div>
   );
 }
