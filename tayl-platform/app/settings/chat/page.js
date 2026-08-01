@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 export default function ChatSettingsPage() {
   const [settings, setSettings] = useState(null);
   const [slug, setSlug] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [greeting, setGreeting] = useState('');
   const [persona, setPersona] = useState('');
   const [saving, setSaving] = useState(false);
@@ -17,6 +18,7 @@ export default function ChatSettingsPage() {
         if (data.error) throw new Error(data.error);
         setSettings(data);
         setSlug(data.public_slug || '');
+        setDisplayName(data.ai_display_name || '');
         setGreeting(data.chat_greeting || '');
         setPersona(data.chat_persona || '');
       })
@@ -34,6 +36,7 @@ export default function ChatSettingsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           public_slug: slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-'),
+          ai_display_name: displayName,
           chat_greeting: greeting,
           chat_persona: persona,
         }),
@@ -69,6 +72,18 @@ export default function ChatSettingsPage() {
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             placeholder="your-business-name"
+            className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs opacity-60 block mb-1">
+            What the AI calls your business <span className="opacity-40">(optional — defaults to your account name)</span>
+          </label>
+          <input
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            placeholder="e.g. Sunrise Cleaning Co."
             className="w-full bg-[#12131A] border border-white/10 rounded px-3 py-2 text-sm"
           />
         </div>

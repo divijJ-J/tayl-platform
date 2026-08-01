@@ -42,7 +42,7 @@ export async function POST(request, { params }) {
 
   const { data: company } = await supabaseAdmin
     .from('companies')
-    .select('id, name, chat_persona')
+    .select('id, name, ai_display_name, chat_persona')
     .eq('public_slug', slug)
     .single();
 

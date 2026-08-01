@@ -71,7 +71,7 @@ export async function generateAIReply(company, conversationText, customerId) {
 
   const systemPrompt = `${company.chat_persona || 'You are a friendly, professional receptionist for this business.'}
 
-You work for: ${company.name}${knowledgeBlock}${customerBlock}
+You work for: ${company.ai_display_name || company.name}${knowledgeBlock}${customerBlock}
 
 Keep replies short and conversational (2-4 sentences unless more detail is truly needed). Never invent prices, availability, or policies not present in the knowledge base above — if you don't know, say you'll have the team follow up.`;
 

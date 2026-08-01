@@ -8,7 +8,7 @@ export async function GET() {
 
   const { data, error } = await supabaseAdmin
     .from('companies')
-    .select('public_slug, chat_greeting, chat_persona')
+    .select('public_slug, chat_greeting, chat_persona, ai_display_name')
     .eq('id', companyId)
     .single();
 
@@ -20,7 +20,7 @@ export async function POST(request) {
   const { companyId } = await getCurrentCompanyId();
   if (!companyId) return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
 
-  const { public_slug, chat_greeting, chat_persona } = await request.json();
+  const { public_slug, chat_greeting, chat_persona, ai_display_name } = await request.json();
 
   if (!public_slug) {
     return NextResponse.json({ error: 'Pick a public link name' }, { status: 400 });
@@ -40,9 +40,9 @@ export async function POST(request) {
 
   const { data, error } = await supabaseAdmin
     .from('companies')
-    .update({ public_slug, chat_greeting, chat_persona })
+    .update({ public_slug, chat_greeting, chat_persona, ai_display_name: ai_display_name || null })
     .eq('id', companyId)
-    .select('public_slug, chat_greeting, chat_persona')
+    .select('public_slug, chat_greeting, chat_persona, ai_display_name')
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
