@@ -1,10 +1,9 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-// Small glowing "firefly" particles drifting behind the app content.
-// Runs on a single canvas with requestAnimationFrame — no React state per
-// frame, so this doesn't cost re-renders. Particles gently wander and bounce
-// off the edges of the viewport.
+// Small firefly-shaped particles drifting behind the app content: a dark
+// body, two fluttering grey wings, and a glowing tail light. Runs on a
+// single canvas with requestAnimationFrame — no React state per frame.
 export default function Fireflies() {
   const canvasRef = useRef(null);
 
@@ -30,7 +29,7 @@ export default function Fireflies() {
     resize();
     window.addEventListener('resize', resize);
 
-    const COLORS = ['#8FF7B0', '#B6FFCB', '#A78BFA']; // mostly green, a couple of violet ones to tie into the theme
+    const GLOW_COLORS = ['#8FF7B0', '#B6FFCB', '#A78BFA']; // mostly green, a couple violet to tie into the theme
     const COUNT = 14;
 
     const flies = Array.from({ length: COUNT }, () => ({
@@ -38,11 +37,14 @@ export default function Fireflies() {
       y: Math.random() * height,
       vx: (Math.random() - 0.5) * 0.35,
       vy: (Math.random() - 0.5) * 0.35,
-      r: 1.4 + Math.random() * 1.6,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      size: 4.5 + Math.random() * 2.5,
+      color: GLOW_COLORS[Math.floor(Math.random() * GLOW_COLORS.length)],
       phase: Math.random() * Math.PI * 2,
       flickerSpeed: 0.008 + Math.random() * 0.015,
+      wingPhase: Math.random() * Math.PI * 2,
+      wingSpeed: 0.35 + Math.random() * 0.25,
       wanderSeed: Math.random() * 1000,
+      heading: Math.random() * Math.PI * 2,
     }));
 
     let raf;
@@ -53,13 +55,11 @@ export default function Fireflies() {
       ctx.clearRect(0, 0, width, height);
 
       for (const f of flies) {
-        // Gentle organic wander, layered on top of a base drift direction.
         f.vx += Math.sin((t + f.wanderSeed) * 0.01) * 0.006;
         f.vy += Math.cos((t + f.wanderSeed) * 0.013) * 0.006;
 
-        // Cap speed so it stays gentle.
         const speed = Math.hypot(f.vx, f.vy);
-        const maxSpeed = 0.6;
+        const maxSpeed = 0.55;
         if (speed > maxSpeed) {
           f.vx = (f.vx / speed) * maxSpeed;
           f.vy = (f.vy / speed) * maxSpeed;
@@ -68,24 +68,62 @@ export default function Fireflies() {
         f.x += f.vx;
         f.y += f.vy;
 
-        // Bounce off the edges — the "colliding with the screen" effect.
         if (f.x < 0) { f.x = 0; f.vx *= -1; }
         if (f.x > width) { f.x = width; f.vx *= -1; }
         if (f.y < 0) { f.y = 0; f.vy *= -1; }
         if (f.y > height) { f.y = height; f.vy *= -1; }
 
-        // Flicker glow intensity, like a real firefly.
+        // Smoothly turn to face the direction of travel instead of snapping.
+        if (speed > 0.02) {
+          const target = Math.atan2(f.vy, f.vx);
+          let diff = target - f.heading;
+          while (diff > Math.PI) diff -= Math.PI * 2;
+          while (diff < -Math.PI) diff += Math.PI * 2;
+          f.heading += diff * 0.08;
+        }
+
         f.phase += f.flickerSpeed;
-        const glow = 0.45 + Math.sin(f.phase) * 0.35;
+        f.wingPhase += f.wingSpeed;
+        const glow = 0.5 + Math.sin(f.phase) * 0.35;
+        const wingFlutter = Math.sin(f.wingPhase); // -1..1
+        const s = f.size;
 
         ctx.save();
-        ctx.globalAlpha = Math.max(0.15, glow);
-        ctx.shadowBlur = 12;
+        ctx.translate(f.x, f.y);
+        ctx.rotate(f.heading);
+
+        // Wings — small grey translucent ellipses, fluttering open/closed.
+        ctx.fillStyle = 'rgba(200,200,210,0.35)';
+        const wingSpread = 0.5 + Math.abs(wingFlutter) * 0.4;
+        ctx.save();
+        ctx.rotate(-wingSpread);
+        ctx.beginPath();
+        ctx.ellipse(-s * 0.1, 0, s * 0.9, s * 0.35, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.rotate(wingSpread);
+        ctx.beginPath();
+        ctx.ellipse(-s * 0.1, 0, s * 0.9, s * 0.35, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // Body — small dark oval, head at the front (direction of travel).
+        ctx.fillStyle = 'rgba(20,20,24,0.9)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, s * 0.55, s * 0.32, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Glowing tail light at the rear.
+        ctx.globalAlpha = Math.max(0.25, glow);
+        ctx.shadowBlur = 10;
         ctx.shadowColor = f.color;
         ctx.fillStyle = f.color;
         ctx.beginPath();
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.arc(-s * 0.55, 0, s * 0.28, 0, Math.PI * 2);
         ctx.fill();
+
         ctx.restore();
       }
 
