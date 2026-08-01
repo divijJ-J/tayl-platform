@@ -28,8 +28,9 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  const { companyId } = await getCurrentCompanyId();
+  const { companyId, role } = await getCurrentCompanyId();
   if (!companyId) return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
+  if (role !== 'owner') return NextResponse.json({ error: 'Only the account owner can manage WhatsApp settings' }, { status: 403 });
 
   const { phone_number_id, access_token, verify_token, notify_phone } = await request.json();
 

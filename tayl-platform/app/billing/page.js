@@ -13,8 +13,9 @@ const PLANS = [
 ];
 
 export default async function BillingPage() {
-  const { user, companyId } = await getCurrentCompanyId();
+  const { user, companyId, role } = await getCurrentCompanyId();
   if (!user) redirect('/login');
+  if (role !== 'owner') redirect('/');
 
   const { data: company } = await supabaseAdmin
     .from('companies')

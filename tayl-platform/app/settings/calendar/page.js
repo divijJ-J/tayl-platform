@@ -8,8 +8,9 @@ export const fetchCache = 'force-no-store';
 export const revalidate = 0;
 
 export default async function CalendarSettingsPage({ searchParams }) {
-  const { user, companyId } = await getCurrentCompanyId();
+  const { user, companyId, role } = await getCurrentCompanyId();
   if (!user) redirect('/login');
+  if (role !== 'owner') redirect('/');
 
   const { data: connection } = await supabaseAdmin
     .from('calendar_connections')

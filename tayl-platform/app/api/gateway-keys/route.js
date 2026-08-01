@@ -3,8 +3,9 @@ import { getCurrentCompanyId } from '../../../lib/supabase-server';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  const { companyId } = await getCurrentCompanyId();
+  const { companyId, role } = await getCurrentCompanyId();
   if (!companyId) return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
+  if (role !== 'owner') return NextResponse.json({ error: 'Only the account owner can manage payment settings' }, { status: 403 });
 
   const { key_id, key_secret, webhook_secret } = await request.json();
   if (!key_id || !key_secret) {

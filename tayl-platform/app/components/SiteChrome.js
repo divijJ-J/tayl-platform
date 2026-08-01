@@ -12,15 +12,16 @@ const LINKS = [
   { href: '/tasks', label: 'Tasks' },
   { href: '/estimates', label: 'AI Estimates' },
   { href: '/settings/services', label: 'Pricing Catalog' },
-  { href: '/settings/knowledge', label: 'Knowledge Base' },
-  { href: '/settings/calendar', label: 'Calendar' },
-  { href: '/settings/chat', label: 'Chat Widget' },
-  { href: '/settings/whatsapp', label: 'WhatsApp' },
-  { href: '/billing', label: 'Billing' },
-  { href: '/settings/payments', label: 'Payment Settings' },
+  { href: '/settings/knowledge', label: 'Knowledge Base', ownerOnly: true },
+  { href: '/settings/calendar', label: 'Calendar', ownerOnly: true },
+  { href: '/settings/chat', label: 'Chat Widget', ownerOnly: true },
+  { href: '/settings/whatsapp', label: 'WhatsApp', ownerOnly: true },
+  { href: '/settings/team', label: 'Team', ownerOnly: true },
+  { href: '/billing', label: 'Billing', ownerOnly: true },
+  { href: '/settings/payments', label: 'Payment Settings', ownerOnly: true },
 ];
 
-export default function SiteChrome({ user, publicSlug, children }) {
+export default function SiteChrome({ user, role, publicSlug, children }) {
   const pathname = usePathname();
   const isPublicChat = pathname?.startsWith('/chat/');
 
@@ -45,7 +46,7 @@ export default function SiteChrome({ user, publicSlug, children }) {
 
         {user ? (
           <>
-            {LINKS.map((link) => {
+            {LINKS.filter((link) => !link.ownerOnly || role === 'owner').map((link) => {
               const active = pathname === link.href;
               return (
                 <a

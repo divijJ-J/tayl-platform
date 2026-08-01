@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { user, companyId } = await getCurrentCompanyId();
+  const { user, companyId, role } = await getCurrentCompanyId();
 
   let publicSlug = null;
   if (companyId) {
@@ -28,7 +28,7 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <SiteChrome user={user} publicSlug={publicSlug}>{children}</SiteChrome>
+        <SiteChrome user={user} role={role} publicSlug={publicSlug}>{children}</SiteChrome>
       </body>
     </html>
   );

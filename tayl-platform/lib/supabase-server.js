@@ -30,21 +30,25 @@ export function createServerSupabase() {
   );
 }
 
-// Returns the signed-in user's company_id, or null if not signed in / no company yet.
-// Use this in every server component / API route that touches business data.
+// Returns the signed-in user's company_id and role, or nulls if not signed in / no company yet.
+// role is 'owner' or 'sales' — use it to gate access to billing/settings pages.
 export async function getCurrentCompanyId() {
   const supabase = createServerSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { user: null, companyId: null };
+  if (!user) return { user: null, companyId: null, role: null };
 
   const { data: membership } = await supabase
     .from('company_members')
-    .select('company_id')
+    .select('company_id, role')
     .eq('user_id', user.id)
     .maybeSingle();
 
-  return { user, companyId: membership?.company_id || null };
+  return {
+    user,
+    companyId: membership?.company_id || null,
+    role: membership?.role || null,
+  };
 }
