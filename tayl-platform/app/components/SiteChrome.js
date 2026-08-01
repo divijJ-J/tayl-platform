@@ -12,13 +12,7 @@ const LINKS = [
   { href: '/tasks', label: 'Tasks' },
   { href: '/estimates', label: 'AI Estimates' },
   { href: '/settings/services', label: 'Pricing Catalog' },
-  { href: '/settings/knowledge', label: 'Knowledge Base', ownerOnly: true },
-  { href: '/settings/calendar', label: 'Calendar', ownerOnly: true },
-  { href: '/settings/chat', label: 'Chat Widget', ownerOnly: true },
-  { href: '/settings/whatsapp', label: 'WhatsApp', ownerOnly: true },
-  { href: '/settings/team', label: 'Team', ownerOnly: true },
-  { href: '/billing', label: 'Billing', ownerOnly: true },
-  { href: '/settings/payments', label: 'Payment Settings', ownerOnly: true },
+  { href: '/settings', label: 'Settings', ownerOnly: true, matchPrefix: true },
 ];
 
 export default function SiteChrome({ user, role, publicSlug, children }) {
@@ -47,7 +41,9 @@ export default function SiteChrome({ user, role, publicSlug, children }) {
         {user ? (
           <>
             {LINKS.filter((link) => !link.ownerOnly || role === 'owner').map((link) => {
-              const active = pathname === link.href;
+              const active = link.matchPrefix
+                ? pathname?.startsWith(link.href) && pathname !== '/settings/services'
+                : pathname === link.href;
               return (
                 <a
                   key={link.href}
