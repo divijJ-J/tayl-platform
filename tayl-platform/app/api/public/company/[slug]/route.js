@@ -6,7 +6,7 @@ export async function GET(request, { params }) {
 
   const { data: company, error } = await supabaseAdmin
     .from('companies')
-    .select('name, chat_greeting')
+    .select('name, ai_display_name, chat_greeting')
     .eq('public_slug', slug)
     .single();
 
@@ -14,5 +14,8 @@ export async function GET(request, { params }) {
     return NextResponse.json({ error: 'Chat not found' }, { status: 404 });
   }
 
-  return NextResponse.json({ name: company.name, greeting: company.chat_greeting });
+  return NextResponse.json({
+    name: company.ai_display_name || 'TAYL',
+    greeting: company.chat_greeting,
+  });
 }

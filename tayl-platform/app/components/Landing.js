@@ -1,5 +1,6 @@
 'use client';
 import TiltCard from './TiltCard';
+import Reveal from './Reveal';
 
 const TRUSTED = ['Helios', 'Kaplan', 'Oakwood', 'Stellar', 'Bright', 'Corebay', 'Northwind'];
 
@@ -122,6 +123,7 @@ export default function Landing() {
       </section>
 
       {/* Trusted by ticker */}
+      <Reveal>
       <section className="py-10 border-y border-white/5">
         <p className="text-center text-[11px] tracking-[0.18em] uppercase text-white/30 mb-6">
           Trusted by service teams shipping quietly, every day
@@ -132,8 +134,10 @@ export default function Landing() {
           ))}
         </div>
       </section>
+      </Reveal>
 
       {/* Feature grid */}
+      <Reveal>
       <section id="features" className="pt-24 pb-16">
         <p className="text-[11px] tracking-[0.18em] uppercase text-violet-400 mb-3">Platform</p>
         <h2 className="font-display text-3xl md:text-4xl font-bold mb-3 max-w-xl">
@@ -144,19 +148,23 @@ export default function Landing() {
         </p>
 
         <div className="grid md:grid-cols-2 gap-4">
-          {FEATURES.map((f) => (
-            <TiltCard key={f.title}>
-              <div className="surface-card rounded-2xl px-6 py-6 h-full">
-                <p className="text-[10.5px] tracking-[0.16em] uppercase text-white/30 mb-3">{f.step}</p>
-                <h3 className="font-display font-semibold text-lg mb-2">{f.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{f.body}</p>
-              </div>
-            </TiltCard>
+          {FEATURES.map((f, i) => (
+            <Reveal key={f.title} delay={i * 90}>
+              <TiltCard>
+                <div className="surface-card rounded-2xl px-6 py-6 h-full">
+                  <p className="text-[10.5px] tracking-[0.16em] uppercase text-white/30 mb-3">{f.step}</p>
+                  <h3 className="font-display font-semibold text-lg mb-2">{f.title}</h3>
+                  <p className="text-sm text-white/50 leading-relaxed">{f.body}</p>
+                </div>
+              </TiltCard>
+            </Reveal>
           ))}
         </div>
       </section>
+      </Reveal>
 
       {/* Workflow */}
+      <Reveal>
       <section id="workflow" className="py-16">
         <p className="text-[11px] tracking-[0.18em] uppercase text-violet-400 mb-3">Workflow</p>
         <h2 className="font-display text-3xl md:text-4xl font-bold mb-10">
@@ -184,8 +192,10 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </Reveal>
 
       {/* Stats */}
+      <Reveal>
       <section className="surface-card rounded-2xl px-6 md:px-8 py-8 my-16 grid grid-cols-2 md:grid-cols-4 gap-6">
         {STATS.map((s) => (
           <div key={s.label}>
@@ -194,8 +204,10 @@ export default function Landing() {
           </div>
         ))}
       </section>
+      </Reveal>
 
       {/* Pricing */}
+      <Reveal>
       <section id="pricing" className="py-16">
         <div className="flex flex-wrap justify-between items-end gap-4 mb-10">
           <div>
@@ -250,8 +262,10 @@ export default function Landing() {
           Every plan starts with a 14-day free trial. No card required to start.
         </p>
       </section>
+      </Reveal>
 
       {/* Final CTA */}
+      <Reveal>
       <section className="py-16">
         <div
           className="rounded-2xl px-6 py-16 text-center"
@@ -265,6 +279,7 @@ export default function Landing() {
           </a>
         </div>
       </section>
+      </Reveal>
 
       {/* Footer */}
       <footer className="py-8 border-t border-white/5 flex flex-wrap justify-between items-center gap-4 text-sm">

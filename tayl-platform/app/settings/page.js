@@ -8,7 +8,7 @@ export const revalidate = 0;
 const SECTIONS = [
   { href: '/settings/services', title: 'Pricing Catalog', body: 'The services and rates quotes and AI estimates draw from.' },
   { href: '/settings/knowledge', title: 'Knowledge Base', body: 'Business context the AI uses to answer questions accurately.' },
-  { href: '/settings/chat', title: 'Chat Widget', body: 'Your AI receptionist — greeting, persona, and embed code.' },
+  { href: '/settings/chat', title: 'AI Chatbot', body: 'Your AI receptionist — the same bubble in the corner of TAYL.' },
   { href: '/settings/whatsapp', title: 'WhatsApp', body: 'Connect a number so customers can message you directly.' },
   { href: '/settings/calendar', title: 'Calendar', body: 'Sync task due dates to Google Calendar automatically.' },
   { href: '/settings/team', title: 'Team', body: 'Invite teammates with limited, role-based access.' },

@@ -47,10 +47,12 @@ export async function findOrCreateCustomer(companyId, { name, email, phone }) {
 // (Phase 8), Customer Memory (Phase 9), and the conversation persona
 // (Phase 10). Used identically by the website chat widget and WhatsApp.
 export async function generateAIReply(company, conversationText, customerId) {
-  const { data: knowledge } = await supabaseAdmin
-    .from('knowledge_sources')
-    .select('title, content')
-    .eq('company_id', company.id);
+  const [{ data: knowledge }, customerResult] = await Promise.all([
+    supabaseAdmin.from('knowledge_sources').select('title, content').eq('company_id', company.id),
+    customerId
+      ? supabaseAdmin.from('customers').select('name, ai_summary').eq('id', customerId).maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
 
   const knowledgeBlock =
     knowledge && knowledge.length > 0
@@ -58,20 +60,14 @@ export async function generateAIReply(company, conversationText, customerId) {
       : '';
 
   let customerBlock = '';
-  if (customerId) {
-    const { data: customer } = await supabaseAdmin
-      .from('customers')
-      .select('name, ai_summary')
-      .eq('id', customerId)
-      .maybeSingle();
-    if (customer?.ai_summary) {
-      customerBlock = `\n\nWhat we know about this customer (${customer.name}) from past interactions:\n${customer.ai_summary}`;
-    }
+  const customer = customerResult?.data;
+  if (customer?.ai_summary) {
+    customerBlock = `\n\nWhat we know about this customer (${customer.name}) from past interactions:\n${customer.ai_summary}`;
   }
 
   const systemPrompt = `${company.chat_persona || 'You are a friendly, professional receptionist for this business.'}
 
-You work for: ${company.ai_display_name || company.name}${knowledgeBlock}${customerBlock}
+You work for: ${company.ai_display_name || 'TAYL'}${knowledgeBlock}${customerBlock}
 
 Keep replies short and conversational (2-4 sentences unless more detail is truly needed). Never invent prices, availability, or policies not present in the knowledge base above — if you don't know, say you'll have the team follow up.`;
 

@@ -1,6 +1,23 @@
 'use client';
 import { useState, useEffect } from 'react';
 
+function CopyableBox({ value }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div
+      className="bg-black/30 border border-white/10 rounded px-3 py-2 mt-1 font-mono text-xs break-all cursor-pointer hover:border-white/20"
+      onClick={() => {
+        navigator.clipboard.writeText(value);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      }}
+      title="Click to copy"
+    >
+      {copied ? 'Copied!' : value}
+    </div>
+  );
+}
+
 export default function WhatsAppSettingsPage() {
   const [data, setData] = useState(null);
   const [phoneNumberId, setPhoneNumberId] = useState('');
@@ -17,7 +34,7 @@ export default function WhatsAppSettingsPage() {
       .then((d) => {
         setData(d);
         setPhoneNumberId(d.phone_number_id || '');
-        setVerifyToken(d.verify_token || '');
+        setVerifyToken(d.verify_token || (Math.random().toString(36).slice(2, 10)));
         setNotifyPhone(d.notify_phone || '');
       });
   }, []);
@@ -36,7 +53,7 @@ export default function WhatsAppSettingsPage() {
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
       setSaved(true);
-      setAccessToken(''); // don't keep the token sitting in the input after save
+      setAccessToken('');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -44,16 +61,15 @@ export default function WhatsAppSettingsPage() {
     }
   };
 
-  if (!data) return <p className="text-sm opacity-60">Loading...</p>;
+  if (!data) return <p className="text-sm text-white/50">Loading...</p>;
 
   if (!data.public_slug) {
     return (
       <div className="max-w-lg">
         <h1 className="font-display text-xl font-semibold mb-2">WhatsApp</h1>
         <p className="text-sm text-white/50">
-          Set up your public link name in{' '}
-          <a href="/settings/chat" className="underline">Chat Widget settings</a> first — WhatsApp reuses
-          the same link so we know which business a message belongs to.
+          Set up your chatbot&apos;s link name in{' '}
+          <a href="/settings/chat" className="underline">AI Chatbot settings</a> first, then come back here.
         </p>
       </div>
     );
@@ -65,33 +81,64 @@ export default function WhatsAppSettingsPage() {
   return (
     <div className="max-w-lg">
       <h1 className="font-display text-xl font-semibold mb-2">WhatsApp</h1>
-      <p className="text-sm text-white/50 mb-6">
-        Connect your own WhatsApp Business number via Meta&apos;s official Cloud API. Replies use the
-        same Knowledge Base and Customer Memory as your website chat.
+      <p className="text-sm text-white/50 mb-1">
+        Let customers message your WhatsApp number and get answered automatically — same brain as your
+        website chatbot.
+      </p>
+      <p className="text-sm text-violet-300 mb-6">
+        This is completely optional. Skip it for now if you like — your website chatbot works fine without it.
       </p>
 
-      <div className="surface-card rounded-2xl px-5 py-4 mb-6 text-sm">
-        <p className="font-medium mb-2">Setup steps</p>
-        <ol className="list-decimal list-inside space-y-1.5 text-white/60">
-          <li>
-            Create a free app at{' '}
-            <a href="https://developers.facebook.com/apps" target="_blank" rel="noreferrer" className="underline">
-              developers.facebook.com/apps
-            </a>{' '}
-            → add the <strong>WhatsApp</strong> product
-          </li>
-          <li>Copy the <strong>Phone Number ID</strong> and a <strong>temporary access token</strong> from the WhatsApp → Getting Started page</li>
-          <li>Pick any random string as your <strong>Verify Token</strong> — you choose this, it just has to match below</li>
-          <li>
-            In Meta&apos;s WhatsApp → Configuration page, set the webhook URL to:
-            <div className="bg-[#12131A]/5 border border-white/10 rounded px-3 py-2 mt-1 font-mono text-xs break-all">
-              {webhookUrl}
-            </div>
-          </li>
-          <li>Use the same Verify Token there, and subscribe to the <strong>messages</strong> field</li>
-        </ol>
+      <div className="space-y-3 mb-8">
+        <div className="surface-card rounded-2xl px-5 py-4">
+          <p className="text-xs text-violet-400 mb-1">STEP 1</p>
+          <p className="font-medium mb-1">Create a free Meta developer account</p>
+          <p className="text-sm text-white/50 mb-2">
+            This is Meta&apos;s (WhatsApp&apos;s parent company) official tool for businesses — free to use.
+          </p>
+          <a
+            href="https://developers.facebook.com/apps"
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm underline text-violet-300"
+          >
+            Open developers.facebook.com/apps →
+          </a>
+        </div>
+
+        <div className="surface-card rounded-2xl px-5 py-4">
+          <p className="text-xs text-violet-400 mb-1">STEP 2</p>
+          <p className="font-medium mb-1">Add the &quot;WhatsApp&quot; product to your app</p>
+          <p className="text-sm text-white/50">
+            After creating an app, look for a button to add products — choose WhatsApp.
+          </p>
+        </div>
+
+        <div className="surface-card rounded-2xl px-5 py-4">
+          <p className="text-xs text-violet-400 mb-1">STEP 3</p>
+          <p className="font-medium mb-1">Copy two things from the &quot;Getting Started&quot; page</p>
+          <p className="text-sm text-white/50">
+            You&apos;ll see a <strong>Phone Number ID</strong> and a <strong>temporary access token</strong> —
+            copy both, you&apos;ll paste them below.
+          </p>
+        </div>
+
+        <div className="surface-card rounded-2xl px-5 py-4">
+          <p className="text-xs text-violet-400 mb-1">STEP 4</p>
+          <p className="font-medium mb-1">Paste this webhook URL into Meta&apos;s Configuration page</p>
+          <p className="text-sm text-white/50 mb-1">This is the address Meta sends incoming messages to.</p>
+          <CopyableBox value={webhookUrl} />
+          <p className="text-sm text-white/50 mt-3 mb-1">
+            Use this as the &quot;Verify Token&quot; there (we made one up for you, or type your own below):
+          </p>
+          <CopyableBox value={verifyToken} />
+          <p className="text-xs text-white/30 mt-2">
+            Then subscribe to the <strong>messages</strong> field — that&apos;s it for Meta&apos;s side.
+          </p>
+        </div>
       </div>
 
+      <p className="text-sm font-medium mb-3">Now paste what you copied:</p>
       <form onSubmit={handleSave} className="space-y-3">
         <div>
           <label className="text-xs text-white/50 block mb-1">Phone Number ID</label>
@@ -119,11 +166,12 @@ export default function WhatsAppSettingsPage() {
             onChange={(e) => setVerifyToken(e.target.value)}
             className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
           />
+          <p className="text-xs text-white/30 mt-1">Must match exactly what you pasted into Meta in Step 4.</p>
         </div>
 
         <div className="pt-2 border-t border-white/5">
           <label className="text-xs text-white/50 block mb-1">
-            Notify me on WhatsApp for new website chats <span className="opacity-50">(optional)</span>
+            Get a WhatsApp ping for new website chats <span className="opacity-50">(optional)</span>
           </label>
           <input
             value={notifyPhone}
@@ -132,8 +180,7 @@ export default function WhatsAppSettingsPage() {
             className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
           />
           <p className="text-xs text-white/30 mt-1">
-            Your own number, with country code, no + or spaces. You&apos;ll get a WhatsApp message the moment
-            a new visitor starts a chat on your website — not for every message, just new leads.
+            Your own number, country code first, no + or spaces. Only pings for new leads, not every message.
           </p>
         </div>
 
